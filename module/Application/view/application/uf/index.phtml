@@ -1,0 +1,55 @@
+<div class="row">
+<div class="col-md-12">
+<div class="box">
+    <div class="box-body">
+        <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="titulo">
+                    <th width="60px">ID</th>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th class="btn_titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php if (isset($this->result["registros"]) && !empty($this->result["registros"])) { ?>
+<?php 
+foreach ($this->result["registros"] as $registro) {
+    $txt_id = $txt_codigo = $txt_descricao = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["descricao"]) && $registro["descricao"]) { $txt_descricao = $registro["descricao"]; }
+    if (isset($registro["codigo"]) && $registro["codigo"]) { $txt_codigo = $registro["codigo"]; }
+?>
+            <tr>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_codigo; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_descricao; ?></a></td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                        <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editar", "id" => $txt_id), true); ?>"><i class="fa fa-cogs"></i></a>
+                        <a class="btn btn-default link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluir", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </td>
+            </tr>
+<?php } ?>
+<?php } else { ?>
+            <tr>
+                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+            </tr>
+<?php } ?>
+            </tbody>
+        </table>
+    </div><!-- /.box-body -->
+    <div class="box-footer clearfix">
+        <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+    </div>
+</div>
+    </div>
+
+</div>
+</div>

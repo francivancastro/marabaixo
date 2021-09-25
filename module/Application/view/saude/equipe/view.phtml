@@ -1,0 +1,43 @@
+<?php
+$txt_id = $txt_descricao = $txt_tipo = $txt_ine = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"];
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["descricao"]) && $registro["descricao"]) {
+        $txt_descricao = $registro["descricao"];
+    }
+    if (isset($registro["ine"]) && $registro["ine"]) {
+        $txt_ine = $registro["ine"];
+    }
+    if (isset($registro["equipe_tipo"]["descricao"]) && $registro["equipe_tipo"]["descricao"]) {
+        $txt_tipo = $registro["equipe_tipo"]["descricao"];
+    }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Equipe</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>Descrição: </dt>
+                    <dd><?php echo $txt_descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Identificador Nacional: </dt>
+                    <dd><?php echo $txt_ine; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Equipe Tipo: </dt>
+                    <dd><?php echo $txt_tipo; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

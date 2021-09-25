@@ -1,0 +1,68 @@
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(null, array(), true));
+$form->setAttribute('class', "form-horizontal");
+$form->prepare();
+?>
+<div class="row">
+    <div class="col-md-12">
+        <?php
+        echo $this->form()->openTag($form);
+        ?>
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Encaminhar Servidor</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <?php
+                $input = $form->get("id_servidor");
+                echo $this->formInput($input);
+                echo $form->showInput("servidor", $this, array("col-width" => 4));
+                echo $form->showInput("matricula", $this, array("col-width" => 2));
+                echo $form->showInput("cpf", $this, array("col-width" => 2));
+                echo $form->showInput("data_ingresso", $this, array("col-width" => 2));
+                echo $form->showInput("data_ultima_alteracao", $this, array("col-width" => 2));
+                $input = $form->get("encaminhamento_status");
+                echo $this->formInput($input);
+                $input = $form->get("id_orgao");
+                echo $input->render($this);
+                $input = $form->get("id_servidor_cargo");
+                echo $input->render($this);
+                $input = $form->get("id_servidor_funcao");
+                echo $input->render($this); 
+                echo $form->showInput("carga_horaria", $this, array("col-width" => 2));
+                echo $this->formLabel($form->get('chefe'));
+                echo $this->formElement($form->get('chefe'));
+                $input = $form->get("id_servidor_encaminhamento_tipo");
+                echo $input->render($this);
+                ?>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="controls">
+                        <div class="col-sm-4">
+                            <?php
+                            echo $this->formLabel($form->get('descricao'));
+                            $input = $form->get("descricao");
+                            echo $this->formTextArea($input);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="controls">
+                        <div class="col-sm-4">
+                            <?php
+                            $input = $form->get("submit");
+                            echo $this->formInput($input);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+        echo $this->form()->closeTag();
+        ?>
+    </div>
+</div>

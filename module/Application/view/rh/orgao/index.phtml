@@ -1,0 +1,123 @@
+<div class="row">
+    <form action="" method="post" class="form-horizontal" id="pesquisa_form">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Formulário de Pesquisa</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="pesquisa_codigo" class="col-sm-2 control-label">Código: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_codigo" id="pesquisa_codigo" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_codigo"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_descricao" class="col-sm-2 control-label">Descrição: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_descricao" id="pesquisa_descricao" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_descricao"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_gestor_ingresso" class="col-sm-2 control-label">Gestor de Ingresso: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <select name="pesquisa_gestor_ingresso" id="pesquisa_gestor_ingresso" class="form-control pesquisa_field">
+                                    <option value="" <?php echo (!$this->pesquisa_dados["pesquisa_gestor_ingresso"]) ? "selected" : ""; ?>>==> SELECIONE <==</option>
+                                    <option value="S" <?php echo ($this->pesquisa_dados["pesquisa_gestor_ingresso"] == "S") ? "selected" : ""; ?>>SIM</option>
+                                    <option value="N" <?php echo ($this->pesquisa_dados["pesquisa_gestor_ingresso"] == "N") ? "selected" : ""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao" class="col-sm-2 control-label"></label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="submit" value="Procurar" class="btn btn-primary" />
+                                <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-12">
+      
+        <div class="box">
+            <div class="box-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="titulo"> 
+                            <th width="60px">ID</th>
+                            <th>Código</th>
+                            <th>Descrição</th>    
+                            <th>Órgão Superior</th>
+                            <th>Gestor de Ingresso</th>
+                            <th class="btn_titulo"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($this->result["registros"]) && !empty($this->result["registros"])) { ?>
+                            <?php
+                            foreach ($this->result["registros"] as $registro) {
+
+                                $txt_id = $txt_codigo = $txt_descricao = $txt_orgaoSuperior = $txt_gestor_ingresso = "--";
+                                if (isset($registro["id"]) && $registro["id"]) {
+                                    $txt_id = $registro["id"];
+                                    $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+                                }
+                                if (isset($registro["codigo"]) && $registro["codigo"]) {
+                                    $txt_codigo = $registro["codigo"];
+                                }
+                                if (isset($registro["tostring"]) && $registro["tostring"]) {
+                                    $txt_descricao = $registro["tostring"];
+                                }
+                                if (isset($registro["orgaoSuperior"]['id']) && $registro["orgaoSuperior"]['id']) {
+                                    $txt_orgaoSuperior = $registro["orgaoSuperior"]['tostring'];
+                                }
+                                if (isset($registro["gestao_ingresso"]) && $registro["gestao_ingresso"]) {
+                                    $txt_gestor_ingresso = $registro["gestao_ingresso"];
+                                }
+                                ?>
+                                <tr>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_codigo; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_descricao; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_orgaoSuperior; ?></a></td>               
+                                    <td><a href="<?php echo $url_view; ?>"><?php
+                                            if ($txt_gestor_ingresso == 'S') {
+                                                echo 'SIM';
+                                            } else {
+                                                echo 'NÂO';
+                                            }
+                                            ?></a></td>               
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editar", "id" => $txt_id), true); ?>"><i class="fa fa-cogs"></i></a>
+                                            <a class="btn btn-default link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluir", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+                <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+            </div>
+        </div>
+
+    </div>
+</div>

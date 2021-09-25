@@ -1,0 +1,37 @@
+<?php
+if (isset($this->result)) {
+    $registro = $this->result;
+    extract($registro);
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Ocorrências</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>ID: </dt>
+                    <dd><?php echo $id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Servidor Responsável: </dt>
+                    <dd><?php echo $id_servidor['usuario']['tostring']; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data da Ocorrência: </dt>
+                    <dd><?php echo $data_servidor_ocorrencia; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo de Ocorrência: </dt>
+                    <dd><?php echo $id_servidor_ocorrencia_tipo['tostring']; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Motivo: </dt>
+                    <dd><?php echo $servidor_ocorrencia_motivo; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+ <header class="main-header">
+    <a href="#" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>A</b>LT</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Marabaixo</b> System</span>
+    </a>
+    <nav class="navbar navbar-static-top" role="navigation">
+    </nav>
+</header>
+<?php
+$txt_usuario = "";
+if (isset($this->usuario) && isset($usuario["tostring"])) {
+    $txt_usuario = $usuario["tostring"];
+}
+$this->inlineScript()->captureStart();
+?>
+$(document).ready(function() {
+    $("#senha").focus().select();
+});
+<?php
+$this->inlineScript()->captureEnd();
+
+$form = $this->form;
+$form->setAttribute('action', $this->url(null, array("action" => "senha"), true));
+$form->setAttribute('class', "form-horizontal");
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+    <div class="col-lg-12 well">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">ATENÇÃO - Você deve Definir Uma Nova Senha</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Usuário: </label>
+                <div class="controls">
+                    <div class="col-sm-6">
+                        <input type="text" name="" id="" class="form-control" disabled value="<?php echo $txt_usuario; ?>" />
+                    </div>
+                </div>
+            </div>
+    <?php
+        echo $form->showInput("senha", $this, array("col-width" => 2)); 
+        echo $form->showInput("confirma_senha", $this, array("col-width" => 2)); 
+    ?>
+            <br />
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="controls">
+                    <div class="col-sm-4">
+    <?php
+        $input = $form->get("submit");   
+        echo $this->formInput($input); 
+    ?>
+                        <a href="<?php echo $this->url(null, array("controller" => "auth", "action" => "logout")); ?>" class="btn btn-default">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+<?php
+echo $this->form()->closeTag();

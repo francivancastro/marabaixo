@@ -1,0 +1,110 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr class="titulo">
+                                <th width="60px">ID</th>
+                                <th>Data / Hora Criação</th>
+                                <th>Nome do Destinatário</th>
+                                <th>E-mail do Destinatário</th>
+                                <th>Título</th>
+                                <th>Processado</th>
+                                <th>Enviado</th>
+                                <th>Data / Hora Envio</th>
+                                <th>Mensagem de Erro</th>
+                                <th class="btn_titulo"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (isset($this->result["registros"]) && !empty($this->result["registros"])) { ?>
+                                <?php
+                                foreach ($this->result["registros"] as $registro) {
+                                    $txt_id = $txt_criacao_data_hora = $txt_nome_destinatario = $txt_email_destinatario = $txt_titulo = $txt_conteudo = $txt_processado = $txt_enviado = $txt_envio_data_hora = $txt_erro = "--";
+                                    if (isset($registro["id"]) && $registro["id"]) {
+                                        $txt_id = $registro["id"];
+                                        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+                                    }
+                                    if (isset($registro["criacao_data"]) && $registro["criacao_data"]) {
+                                        $txt_criacao_data_hora = \Marabaixo\Util::formatData($registro["criacao_data"]);
+                                        if (isset($registro["criacao_hora"]) && $registro["criacao_hora"]) {
+                                            $txt_criacao_data_hora .= " " . $registro["criacao_hora"];
+                                        }
+                                    }
+                                    if (isset($registro["destinatario_nome"]) && $registro["destinatario_nome"]) {
+                                        $txt_nome_destinatario = $registro["destinatario_nome"];
+                                    }
+                                    if (isset($registro["destinatario_email"]) && $registro["destinatario_email"]) {
+                                        $txt_email_destinatario = $registro["destinatario_email"];
+                                    }
+                                    if (isset($registro["titulo"]) && $registro["titulo"]) {
+                                        $txt_titulo = $registro["titulo"];
+                                    }
+                                    if (isset($registro["mensagem"]) && $registro["mensagem"]) {
+                                        $txt_conteudo = $registro["mensagem"];
+                                    }
+                                    if (isset($registro["processado"])) {
+                                        $txt_processado = "NÃO";
+                                        if ($registro["processado"]) {
+                                            $txt_processado = "SIM";
+                                        }
+                                    }
+                                    if (isset($registro["enviado"])) {
+                                        $txt_enviado = "NÃO";
+                                        if ($registro["enviado"]) {
+                                            $txt_enviado = "SIM";
+                                        }
+                                    }
+                                    if (isset($registro["envio_data"]) && $registro["envio_data"]) {
+                                        $txt_envio_data_hora = \Marabaixo\Util::formatData($registro["envio_data"]);
+                                        if (isset($registro["criacao_hora"]) && $registro["criacao_hora"]) {
+                                            $txt_envio_data_hora .= " " . $registro["criacao_hora"];
+                                        }
+                                    }
+                                    if (isset($registro["smtp_erro"]) && $registro["smtp_erro"]) {
+                                        $txt_erro = $registro["smtp_erro"];
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_criacao_data_hora; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_nome_destinatario; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_email_destinatario; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_titulo; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_processado; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_enviado; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_envio_data_hora; ?></a></td>
+                                        <td><a href="<?php echo $url_view; ?>"><?php echo $txt_erro; ?></a></td>
+                                        <td>
+                                            <div class="btn-group pull-right" role="group">
+                                                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i> <strong>Visualizar</strong></a></li>
+                                                    <li><a class="link_confirma" title="Marcar como Não Processado" href="<?php echo $this->url(null, array("action" => "naoprocessado", "id" => $txt_id), true); ?>"><i class="fa fa-star-half-o"></i> Marcar como Não Processado</a></li>
+                                                    <li><a class="link_confirma" title="Forçar Envio" href="<?php echo $this->url(null, array("action" => "enviar", "id" => $txt_id), true); ?>"><i class="fa fa-mail-forward"></i> Forçar Envio</a></li>
+                                                    <li><a class="link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluir", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i> Excluir</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

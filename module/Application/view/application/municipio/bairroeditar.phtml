@@ -1,0 +1,61 @@
+<?php
+    $txt_municipio = "";
+    if (isset($this->municipio['descricao'])) {
+        $txt_municipio = $this->municipio['descricao'];
+    }
+?>
+<?php $this->inlineScript()->captureStart(); ?>
+    $(document).ready(function() {
+        $(".form-control").first().focus().select();
+    });
+<?php $this->inlineScript()->captureEnd(); ?>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(null, array(), true));
+$form->setAttribute('class', "form-horizontal");
+
+$form->prepare();
+?>
+<div class="row">
+<div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Município > Bairros</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>Municipio:</dt>
+            <dd><?php echo $txt_municipio; ?></dd>
+        </dl>
+    </div>
+</div>  
+<?php
+echo $this->form()->openTag($form);
+?>
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Cadastro de Bairro</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <?php 
+$input = $form->get("id"); echo $this->formInput($input); 
+echo $form->showInput("descricao", $this, array("col-width" => 4)); 
+?>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label"></label>
+            <div class="controls">
+                <div class="col-sm-4">
+<?php
+$input = $form->get("submit");   
+echo $this->formInput($input); 
+?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+echo $this->form()->closeTag();
+?>
+</div>
+</div>

@@ -1,0 +1,197 @@
+<?php
+$sm = $this->getHelperPluginManager()->getServiceLocator();
+$app = $sm->get("AplicacaoFachada");
+
+$txt_id = "0";
+if (isset($this->documento["id"]) && $this->documento["id"]) {
+    $txt_id = $this->documento["id"];
+}
+?>
+<script type="text/javascript">
+    var obj_ajax = false;
+
+    $(document).ready(function () {
+        $("#btn_arquivo_add").click(function () {
+            $.clearAllMessage();
+            $("#arquivo_form").toggle();
+        });
+        $("#btn_arquivo_salvar").click(function () {
+            $.clearAllMessage();
+            try {
+                var id = $("#id_arquivo").val();
+                if (!id) {
+                    throw {"message": "Falha ao Executar Operação, Nenhum Arquivo Informado!"};
+                }
+
+                if (!id.length) {
+                    throw {"message": "Falha ao Executar Operação, Nenhum Arquivo Informado!"};
+                }
+
+                if (obj_ajax) {
+                    obj_ajax.abort();
+                }
+                var obj_ajax = $.ajax("<?php echo $this->url(null, array("controller" => "arquivo", "action" => "info")); ?>", {
+                    "type": "post",
+                    "dataType": "json",
+                    "data": {"id": id}
+                });
+                obj_ajax.done(function (response) {
+                    try {
+                        var arquivo_obj = {};
+
+                        if (response.errors && response.errors.length) {
+                            throw {"message": response.errors};
+                        }
+
+                        if (!response.data) {
+                            throw {"message": "Falha ao Executar Operação, Dados Inválidos!!"};
+                        }
+
+                        var arq = response.data;
+                        if (arq.id) {
+                            arquivo_obj.id = arq.id;
+                        }
+                        if (arq.legenda) {
+                            arquivo_obj.legenda = arq.legenda;
+                        }
+
+                        var div_principal = $("<div>", {"class": "col-md-2 arquivo_body_principal"}).appendTo($("#arquivo_body"));
+                        var input_hidden = $("<input>", {"type": "hidden", "name": "lista_id_arquivo[]", "id": "lista_id_arquivo_" + arquivo_obj.id, "value": arquivo_obj.id}).appendTo(div_principal);
+                        var div_box = $("<div>", {"class": "box", "style": "border: 2px solid #ccc;"}).appendTo(div_principal);
+                        var div_box_header = $("<div>", {"class": "box-header with-border", "style": "background-color: #ccc;", "text": arquivo_obj.legenda}).appendTo(div_box);
+                        var div_box_body = $("<div>", {"class": "box-body text-center"}).appendTo(div_box);
+                        var div_img = $("<img>", {"src": "<?php echo $this->basePath(); ?>/arquivo/view/id/" + arquivo_obj.id + "/width/150/height/150", "alt": "Imagem"}).appendTo(div_box_body);
+                        var div_box_footer = $("<div>", {"class": "box-footer"}).appendTo(div_box);
+                        $("<input>", {"type": "button", "value": "Excluir", "class": "btn btn-primary btn_arquivo_excluir"}).appendTo(div_box_footer);
+
+                        $("#arquivo_form").hide();
+                        $("#id_arquivo_btn_arquivo_zerar").click();
+                    } catch (ex) {
+                        $.addErrorMessage(ex.message);
+                    }
+                });
+
+            } catch (ex) {
+                $.addErrorMessage(ex.message);
+            }
+        });
+
+        $(".box").delegate(".btn_arquivo_excluir", "click", function () {
+            $(this).parents(".arquivo_body_principal").remove();
+        });
+
+        $(".form-control").first().focus().select();
+    });
+</script>
+<style type="text/css">
+    .btn_arquivo_excluir {
+        width: 100%;
+    }
+</style>
+<form action="" method="post" class="form-horizontal">
+    <input type="hidden" name="id" id="id" value="<?php echo $txt_id; ?>" />
+    <div class="row">
+        <?php include("documentotipo.phtml"); ?>
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Cadastro de Documento</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <?php echo $this->html_controls; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <input type="button" value="Adicionar Arquivo" class="btn btn-primary" id="btn_arquivo_add" />
+        </div>
+    </div>
+
+    <div class="row" style="display:none;" id="arquivo_form">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Novo Arquivo</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <?php
+                    $obj = new \Marabaixo\Form\Element\Arquivo("id_arquivo");
+                    $obj->setLabel("Arquivo");
+                    echo $obj->render($this);
+                    ?>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label"></label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="button" value="Adicionar" class="btn btn-primary" id="btn_arquivo_salvar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="box-title">Arquivos</h3>
+                        </div>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body" id="arquivo_body">
+                    <?php
+                    if (count($this->arquivos)) {
+                        foreach ($this->arquivos as $arquivo) {
+                            $txt_tostring = $txt_id = "";
+                            if (isset($arquivo["id"]) && $arquivo["id"]) {
+                                $txt_id = $arquivo["id"];
+                            }
+                            if (isset($arquivo["tostring"]) && $arquivo["tostring"]) {
+                                $txt_tostring = $arquivo["tostring"];
+                            }
+                            ?>
+                            <div class="col-md-2 arquivo_body_principal">
+                                <input type="hidden" name="lista_id_arquivo[]" id="lista_id_arquivo_<?php echo $txt_id; ?>" value="<?php echo $txt_id; ?>" />
+                                <div class="box" style="border: 2px solid #ccc;">
+                                    <div class="box-header with-border" style="background-color: #ccc;"><?php echo $txt_tostring; ?></div>
+                                    <div class="box-body text-center">
+                                        <img src="<?php echo $this->basePath(); ?>/arquivo/view/id/<?php echo $txt_id; ?>/width/150/height/150" alt="Imagem" />
+                                    </div>
+                                    <div class="box-footer">
+                                        <input type="button" value="Excluir" class="btn btn-primary btn_arquivo_excluir" />
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="descricao" class="col-sm-2 control-label"></label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="submit" value="Salvar Documento" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,57 @@
+<?php
+$txt_id = $txt_descricao = $txt_controller = $txt_componente = $txt_action = "--";
+if (isset($this->result["id"])) { $txt_id = $this->result["id"]; }
+if (isset($this->result["descricao"])) { $txt_descricao = $this->result["descricao"]; }
+if (isset($this->result["controller"])) { $txt_controller = $this->result["controller"]; }
+if (isset($this->result["componentes"]) && count($this->result["componentes"])) {
+    $txt = array();
+    foreach ($this->result["componentes"] as $componente) {
+        if (isset($componente["tostring"])) {
+            $txt[] = $componente["tostring"];
+        }
+    }
+    $txt_componente = implode("<br />", $txt);
+}
+if (isset($this->result["actions"]) && count($this->result["actions"])) {
+    $txt = array();
+    foreach ($this->result["actions"] as $action) {
+        if (isset($action["tostring"])) {
+            $txt[] = $action["tostring"];
+        }
+    }
+    $txt_action = implode("<br />", $txt);
+}
+?>
+<div class="row">
+<div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Módulo</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>ID: </dt>
+            <dd><?php echo $txt_id; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição: </dt>
+            <dd><?php echo $txt_descricao; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Controller: </dt>
+            <dd><?php echo $txt_controller; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Componentes: </dt>
+            <dd><?php echo $txt_componente; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Actions: </dt>
+            <dd><?php echo $txt_action; ?></dd>
+        </dl>
+    </div><!-- /.box-body -->
+    <div class="box-footer clearfix">
+    </div>
+</div>
+</div>
+</div>

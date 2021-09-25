@@ -1,0 +1,48 @@
+<?php $this->inlineScript()->captureStart(); ?>
+    $(document).ready(function() {
+        $(".form-control").first().focus().select();
+    });
+<?php $this->inlineScript()->captureEnd(); ?>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(null, array(), true));
+$form->setAttribute('class', "form-horizontal");
+
+$form->prepare();
+?>
+    <div class="row">
+<div class="col-md-12">
+<?php
+echo $this->form()->openTag($form);
+?>
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Cadastro de Widget</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <?php 
+$input = $form->get("id_widget"); echo $this->formInput($input); 
+echo $form->showInput("descricao", $this, array("col-width" => 4)); 
+echo $form->showInput("nome_classe", $this, array("col-width" => 4)); 
+
+echo $form->show("Select", "status", $this, array("col-width" => 4)); 
+echo $form->show("Select", "ordem", $this, array("col-width" => 4)); 
+?>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label"></label>
+            <div class="controls">
+                <div class="col-sm-4">
+<?php
+$input = $form->get("submit");   
+echo $this->formInput($input); 
+?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+echo $this->form()->closeTag();
+?>
+</div>
+        </div>

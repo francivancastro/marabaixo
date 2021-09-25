@@ -1,0 +1,71 @@
+<?php
+$txt_id = $txt_regiao = $txt_codigo_cnes = $txt_tipo = $txt_gestao = $txt_pj = $txt_sigla = $txt_descricao = $txt_responsavel = $txt_endereco = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_descricao = $registro["tostring"]; }
+    if (isset($registro["sigla"]) && $registro["sigla"]) { $txt_sigla = $registro["sigla"]; }
+    if (isset($registro["codigo_cnes"]) && $registro["codigo_cnes"]) { $txt_codigo_cnes = $registro["codigo_cnes"]; }
+    if (isset($registro["usuario"]["pessoa_fisica"]["id"]) && $registro["usuario"]["pessoa_fisica"]["id"]) { $txt_responsavel = $registro["usuario"]["pessoa_fisica"]["tostring"]; }
+    if (isset($registro["regiao"]["tostring"]) && $registro["regiao"]["tostring"]) { $txt_regiao = $registro["regiao"]["tostring"]; }
+    if (isset($registro["estabelecimento_saude_tipo"]["tostring"]) && $registro["estabelecimento_saude_tipo"]["tostring"]) { $txt_tipo = $registro["estabelecimento_saude_tipo"]["tostring"]; }
+    if (isset($registro["estabelecimento_gestao"]["tostring"]) && $registro["estabelecimento_gestao"]["tostring"]) { $txt_gestao = $registro["estabelecimento_gestao"]["tostring"]; }
+    if (isset($registro["pessoa_juridica"]["tostring"]) && $registro["pessoa_juridica"]["tostring"]) { $txt_pj = $registro["pessoa_juridica"]["tostring"]; }
+    if (isset($registro["endereco"]["tostring"]) && $registro["endereco"]["tostring"]) { $txt_endereco = $registro["endereco"]["tostring"]; }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Estabelecimento de Saúde</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+                <dt>ID: </dt>
+                <dd><?php echo $txt_id; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Região: </dt>
+                <dd><?php echo $txt_regiao; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Código CNES: </dt>
+                <dd><?php echo $txt_codigo_cnes; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Tipo: </dt>
+                <dd><?php echo $txt_tipo; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Gestão: </dt>
+                <dd><?php echo $txt_gestao; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Sigla: </dt>
+                <dd><?php echo $txt_sigla; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Descrição: </dt>
+                <dd><?php echo $txt_descricao; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Responsável: </dt>
+                <dd><?php echo $txt_responsavel; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Pessoa Jurídica: </dt>
+                <dd><?php echo $txt_pj; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Endereço: </dt>
+                <dd><?php echo $txt_endereco; ?></dd>
+            </dl>
+    </div>
+</div>
+    </div>
+</div>

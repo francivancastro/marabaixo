@@ -1,0 +1,38 @@
+<?php
+$txt_id = $txt_chave = $txt_descricao = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_descricao = $registro["tostring"]; }
+    if (isset($registro["chave"]) && $registro["chave"]) { $txt_chave = $registro["chave"]; }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar de Estabelecimento de Gestão</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                        <dt>ID: </dt>
+                        <dd><?php echo $txt_id; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Chave: </dt>
+                        <dd><?php echo $txt_chave; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Descrição: </dt>
+                        <dd><?php echo $txt_descricao; ?></dd>
+                    </dl>
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+            </div>
+        </div>
+    </div>
+</div>

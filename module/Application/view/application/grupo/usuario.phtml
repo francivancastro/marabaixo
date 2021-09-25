@@ -1,0 +1,270 @@
+<?php
+$txt_grupo = "";
+if ($this->grupo["descricao"]) {
+    $txt_grupo = $this->grupo["descricao"];
+}
+?>
+<script type="text/javascript">
+var obj_ajax = false;
+var pagina_atual = 1;
+
+$(document).ready(function() {
+    $("#modal_usuario").on("shown.bs.modal", function() {
+        $("#janela_pesquisa_nome").val("").focus();
+    });    
+    $("#modal_usuario").on("show.bs.modal", function() {
+        listaUsuario();
+    });
+    $("#modal_formulario").submit(function() {
+        listaUsuario();
+        return false;
+    });
+    $("#btn_modal_limpar").click(function() {
+        $("#janela_pesquisa_nome").val("").focus();
+        pagina_atual = 1;
+        listaUsuario();
+    });
+});
+
+function addusuario() {
+    $("#modal_usuario").modal("show");
+}
+
+function selecionaPagina(page) {
+    pagina_atual = page;
+    $("#modal_formulario").submit();
+}
+
+function listaUsuario() {
+    $.clearAllMessage();
+    try {
+        $("#modal_usuario table").hide();
+        if (obj_ajax) {
+            obj_ajax.abort();
+        }
+        var obj_ajax = $.ajax("<?php echo $this->url(null, array("controller" => "usuario", "action" => "listarporpagina")); ?>", {
+            "type": "post",
+            "dataType" : "json",
+            "data" : { "pesquisa_nome" : $("#janela_pesquisa_nome").val(), "page" : pagina_atual, "qtd_por_pagina" : 15 }
+        });
+        obj_ajax.done(function(response) {
+            try {
+                if (!response) {
+                    throw { "message": "Falha ao Executar Operação, Dados Inválidos!!"};
+                }
+                if (response.page) {
+                    pagina_atual = response.page;
+                }
+                $("#modal_usuario table tbody tr").remove();
+                $("#modal_paginacao").children().remove();
+                if (response.registros && response.registros.length) {
+                    for (var i = 0; i < response.registros.length; i++) {
+                        var obj = response.registros[i];
+                        var tr = $("<tr>");
+                        tr.appendTo($("#modal_usuario table tbody"));
+                        
+                        var txt_id = txt_nome = txt_email = "--";
+                        if (obj.id) { txt_id = obj.id; }
+                        if (obj.pessoa_fisica.nome) { txt_nome = obj.pessoa_fisica.nome; }
+                        if (obj.pessoa_fisica.pessoa.email) { txt_email = obj.pessoa_fisica.pessoa.email; }
+
+                        $('<td>' + txt_id + '</td>').appendTo(tr);
+                        $('<td>' + txt_nome + '</td>').appendTo(tr);
+                        $('<td>' + txt_email + '</td>').appendTo(tr);
+                        $('<td><input type="button" class="btn btn-default pull-right link_usuario" value="Adicionar Usuários ao Grupo" id="' + obj.id + '"></td>').appendTo(tr);
+                    }
+                    $(".link_usuario").on("click", function() {
+                        var id = $(this).prop("id");
+                        window.location = "<?php echo $this->url(null, array("controller" => "grupo", "action" => "vincularusuario"), false); ?>/id/" + id;
+                    });
+                    $("#modal_paginacao").html($.paginacao(response));
+                } else {
+                    pagina_atual = 1;
+                    $('<tr><td class="text-center" colspan="4">NENHUM USUÁRIO LOCALIZADO</td></tr>').appendTo($("#modal_usuario table tbody"));
+                }
+                $("#modal_usuario table").show();
+            } catch (ex) {
+                $("#modal_usuario").modal("hide");
+                $.clearAllMessage();
+                $.addErrorMessage(ex.message);
+            }
+        });
+    } catch (ex) {
+        $("#modal_usuario").modal("hide");
+        $.clearAllMessage();
+        $.addErrorMessage(ex.message);
+    }
+}
+</script>
+<div class="row">
+<div class="col-md-12">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Usuarios Vinculados</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <dl class="dl-horizontal">
+            <dt>Grupo: </dt>
+            <dd><?php echo $txt_grupo; ?></dd>
+        </dl>
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+        </div>
+    </div>
+</div>
+<form action="" method="post" class="form-horizontal" id="pesquisa_form">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Formulário de Pesquisa - Usuário</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="form-group">
+                <label for="pesquisa_nome" class="col-sm-2 control-label">Nome: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="text" name="pesquisa_nome" id="pesquisa_nome" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_nome"]; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="pesquisa_email" class="col-sm-2 control-label">E-mail: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="text" name="pesquisa_email" id="pesquisa_email" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_email"]; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="col-sm-2 control-label"></label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="submit" value="Procurar" class="btn btn-primary" />
+                        <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-md-12">
+<div class="box">
+    <div class="box-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="titulo">
+                    <th width="60px">ID</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th class="btn_titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php if (isset($this->result["registros"]) && !empty($this->result["registros"])) { ?>
+<?php 
+foreach ($this->result["registros"] as $registro) {
+    $txt_id = $txt_nome = $txt_email = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+    }
+    if (isset($registro["pessoa_fisica"]["nome"]) && $registro["pessoa_fisica"]["nome"]) { $txt_nome = $registro["pessoa_fisica"]["nome"]; }
+    if (isset($registro["pessoa_fisica"]["pessoa"]["email"]) && $registro["pessoa_fisica"]["pessoa"]["email"]) { $txt_email = $registro["pessoa_fisica"]["pessoa"]["email"]; }
+?>
+            <tr>
+                <td><?php echo $txt_id; ?></td>
+                <td><?php echo $txt_nome; ?></td>
+                <td><?php echo $txt_email; ?></td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-default link_confirma" title="Remover Usuário" href="<?php echo $this->url(null, array("action" => "removerusuario", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </td>
+            </tr>
+<?php } ?>
+<?php } else { ?>
+            <tr>
+                <td colspan="4"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+            </tr>
+<?php } ?>
+            </tbody>
+        </table>
+    </div><!-- /.box-body -->
+    <div class="box-footer clearfix">
+        <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+    </div>
+</div>
+
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_usuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Grupos >> Adicionar Usuários</h4>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; height: 35em;">
+                <form action="" method="post" id="modal_formulario" class="form-horizontal">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Formulário de Pesquisa - Usuário</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                        <div class="form-group">
+                            <label for="janela_pesquisa_nome" class="col-sm-2 control-label">Nome: </label>
+                            <div class="controls">
+                                <div class="col-sm-7">
+                                    <input type="text" name="janela_pesquisa_nome" id="janela_pesquisa_nome" class="form-control" value="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="controls">
+                                <div class="col-sm-7">
+                                    <input type="submit" value="Procurar" class="btn btn-primary" />
+                                    <input type="button" value="Limpar" id="btn_modal_limpar" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Bordered Table</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr class="titulo">
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>E-mail</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ID</td>
+                                    <td>Nome</td>
+                                    <td>Email</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div><!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div id="modal_paginacao"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

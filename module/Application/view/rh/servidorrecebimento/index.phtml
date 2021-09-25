@@ -1,0 +1,70 @@
+<div class="row">
+ <div class="col-md-12">
+    
+        <div class="box">
+            <div class="box-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="titulo">
+                            <th width="60px">ID</th>
+                            <th>Nome</th>
+                            <th>Matricula</th>
+                            <th>C.P.F.</th>
+                            <th>Situação</th>
+                            <th class="btn_titulo"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($this->result["registros"])) { ?>                        
+                            <?php
+                            
+                            foreach ($this->result["registros"] as $registro) {
+                                
+                                $txt_id = $txt_nome = $txt_email = $txt_cpf = $txt_status = "--";
+                                if (isset($registro["id"]) && $registro["id"]) {
+                                    $txt_id = $registro["id"];
+                                    $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+                                }
+                                if (isset($registro['servidor_movimento']['servidor']["usuario"]["tostring"]) && $registro['servidor_movimento']['servidor']["usuario"]["tostring"]) {
+                                    $txt_nome = $registro['servidor_movimento']['servidor']["usuario"]["tostring"];
+                                }
+                                if (isset($registro['servidor_movimento']['servidor']["matricula"]) && $registro['servidor_movimento']['servidor']["matricula"]) {
+                                    $txt_matricula = $registro['servidor_movimento']['servidor']["matricula"];
+                                }
+                                if (isset($registro['servidor_movimento']['servidor']["usuario"]["pessoa_fisica"]["cpf"]) && $registro['servidor_movimento']['servidor']["usuario"]["pessoa_fisica"]["cpf"]) {
+                                    $txt_cpf = \Marabaixo\Util::formatCpf($registro['servidor_movimento']['servidor']["usuario"]["pessoa_fisica"]["cpf"]);
+                                }
+                                if (isset($registro['servidor_movimento']['servidor']["servidor_situacao"]["descricao"]) && $registro['servidor_movimento']['servidor']["servidor_situacao"]["descricao"]) {
+                                    $txt_situacao = $registro['servidor_movimento']['servidor']["servidor_situacao"]["descricao"];
+                                }
+                                ?>
+                                <tr>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_nome; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_matricula; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_cpf; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_situacao; ?></a></td>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>                                            
+                                            <a class="btn btn-default" title="Receber" href="<?php echo $this->url(null, array("action" => "receber", "id"=> $txt_id), true); ?>"><i class="fa fa-arrow-up"></i></a>
+                                            
+                                        </div>
+                                    </td>
+                                </tr>
+    <?php } ?>
+                <?php } else { ?>
+                            <tr>
+                                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+                            </tr>
+<?php } ?>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+<?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+            </div>
+        </div>
+
+    </div>
+</div>

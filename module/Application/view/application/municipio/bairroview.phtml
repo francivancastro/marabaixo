@@ -1,0 +1,28 @@
+<?php
+$txt_id = $txt_municipio = $txt_descricao = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["descricao"]) && $registro["descricao"]) { $txt_descricao = $registro["descricao"]; }
+    if (isset($registro["municipio"]["tostring"]) && $registro["municipio"]["tostring"]) { $txt_municipio = $registro["municipio"]["tostring"]; }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Bairro</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>Municipio: </dt>
+            <dd><?php echo $txt_municipio; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição: </dt>
+            <dd><?php echo $txt_descricao; ?></dd>
+        </dl>
+    </div>
+</div>
+    </div>
+</div>

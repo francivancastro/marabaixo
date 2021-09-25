@@ -1,0 +1,75 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#email").focus();
+    });
+</script>
+<div class="login-box">
+    
+         <?php if ($this->config) { 
+             ?>
+            <?php if (isset($config["cliente"]["id_arquivo_logo"])) { ?>
+    <div class="well-sm text-center" >
+            <a href="#"><img style="z-index: 2; position: relative" src="<?php echo $this->basePath(); ?>/arquivo/view/id/<?php echo $config["cliente"]["id_arquivo_logo"] ; ?>/width/150" alt="" /></a>
+        </div>
+         <?php } ?>
+            <?php } ?>
+            <div class="block">
+                <div class="panel panel-default" style="z-index: 2">
+                <div class="panel-heading">
+                    <div class="panel-title text-center">
+                       <?php if ($this->config) { ?>
+            <?php if (isset($config["cliente"]["nome_fantasia"])) { ?>
+                <?php echo $config["cliente"]["nome_fantasia"]; ?>
+            <?php } ?>
+            <?php } ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url(null, array("controller" => "auth", "action" => "index")));
+$form->setAttribute('class', "form-login");
+
+$this->inlineScript()->captureStart();
+?>
+    $(document).ready(function() {
+    $("#email").focus();
+});
+<?php
+$this->inlineScript()->captureEnd();
+?>
+<?php 
+echo $this->form()->openTag($form); 
+?>
+                <div class="form-group">
+                <div class="input-group">
+                        <span class="input-group-addon" style="font-size: 11px; font-weight: bold">@</span>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                      <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
+                    </div>
+                </div>
+                <label class="checkbox">
+                    <span class="pull-right">
+                        <a class="btn btn-warning" href="<?php echo $this->url(null, array("controller" => "auth", "action" => "recupera")); ?>"> Esqueceu a senha?</a>
+                    </span>
+                </label>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <button class="btn btn-primary btn-block"type="submit"><i class="fa fa-lock"></i> Login</button>
+                    </div>
+                </div>
+                
+                
+       <?php echo $this->form()->closeTag($form);?>
+            </div>
+            <div class="panel-footer text-center">
+                <small><strong>Copyright © 2016 <a href="http://www.marabaixo.com.br/" target="_blank">Marabaixo System</a> </strong> - Todos os direitos reservados.</small>
+            </div>
+        </div>
+    </div>
+</div>

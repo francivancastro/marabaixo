@@ -1,0 +1,130 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btn_importar_cancelar").click(function() {
+            importar();
+        });
+    });
+    
+    function importar() {
+        var form = $("#importar_form");
+        if (form && form.length) {
+            $("#icone_arquivo").val("");
+            var visible = form.is(":visible");
+            if (visible) {
+                form.hide();
+            } else {
+                form.show();
+            }
+        }
+    }
+</script>
+<div class="row">
+<form action="" method="post" class="form-horizontal" id="pesquisa_form">
+    <div class="col-md-12">
+<div class="box">
+    
+    <div class="box-header with-border">
+        <h3 class="box-title">Formulário de Pesquisa</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="form-group">
+                <label for="pesquisa_icone" class="col-sm-2 control-label">Ícone: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="text" name="pesquisa_icone" id="pesquisa_icone" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_icone"]; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="col-sm-2 control-label"></label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="submit" value="Procurar" class="btn btn-primary" />
+                        <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+<form action="<?php echo $this->url(null, array("controller" => "icone", "action" => "importar")); ?>" method="post" class="form-horizontal" id="importar_form" enctype="multipart/form-data" style="display:none;">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Importar Ícones</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+            <div class="form-group">
+                <label for="icone_arquivo" class="col-sm-2 control-label">Arquivo: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="file" name="icone_arquivo" id="icone_arquivo" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="col-sm-2 control-label"></label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="submit" value="Importar" class="btn btn-primary" />
+                        <input type="button" value="Cancelar" class="btn btn-default" id="btn_importar_cancelar" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-md-12">
+<div class="box">
+    <div class="box-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="titulo">
+                    <th width="60px">ID</th>
+                    <th width="80px">Imagem</th>
+                    <th>Ícone</th>
+                    <th class="btn_titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php if (isset($this->result["registros"]) && $this->result["registros"]) { ?>
+<?php 
+foreach ($this->result["registros"] as $registro) {
+    $txt_id = $txt_icone = $txt_imagem = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_icone = $registro["tostring"]; }
+    if (isset($registro["icone"]) && $registro["icone"]) { $txt_imagem = "<i class='fa {$registro["icone"]}'></i>"; }
+?>
+            <tr>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_imagem; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_icone; ?></a></td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                        <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editar", "id" => $txt_id), true); ?>"><i class="fa fa-cogs"></i></a>
+                        <a class="btn btn-default link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluir", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i></a>
+                    </div>
+                </td>
+            </tr>
+<?php } ?>
+<?php } else { ?>
+            <tr>
+                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+            </tr>
+<?php } ?>
+            </tbody>
+        </table>
+    </div><!-- /.box-body -->
+    <div class="box-footer clearfix">
+        <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+    </div>
+</div>
+
+</div>
+</div>

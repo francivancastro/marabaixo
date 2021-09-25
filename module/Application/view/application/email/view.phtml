@@ -1,0 +1,102 @@
+<?php
+$txt_id = $txt_codigo = $txt_descricao = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    $txt_id = $txt_criacao_data_hora = $txt_nome_destinatario = $txt_email_destinatario = $txt_titulo = $txt_conteudo = $txt_processado = $txt_enviado = $txt_envio_data_hora = $txt_erro = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"];
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["criacao_data"]) && $registro["criacao_data"]) {
+        $txt_criacao_data_hora = \Marabaixo\Util::formatData($registro["criacao_data"]);
+        if (isset($registro["criacao_hora"]) && $registro["criacao_hora"]) {
+            $txt_criacao_data_hora .= " " . $registro["criacao_hora"];
+        }
+    }
+    if (isset($registro["destinatario_nome"]) && $registro["destinatario_nome"]) {
+        $txt_nome_destinatario = $registro["destinatario_nome"];
+    }
+    if (isset($registro["destinatario_email"]) && $registro["destinatario_email"]) {
+        $txt_email_destinatario = $registro["destinatario_email"];
+    }
+    if (isset($registro["titulo"]) && $registro["titulo"]) {
+        $txt_titulo = $registro["titulo"];
+    }
+    if (isset($registro["mensagem"]) && $registro["mensagem"]) {
+        $txt_conteudo = $registro["mensagem"];
+    }
+    if (isset($registro["processado"])) {
+        $txt_processado = "NÃO";
+        if ($registro["processado"]) {
+            $txt_processado = "SIM";
+        }
+    }
+    if (isset($registro["enviado"])) {
+        $txt_enviado = "NÃO";
+        if ($registro["enviado"]) {
+            $txt_enviado = "SIM";
+        }
+    }
+    if (isset($registro["envio_data"]) && $registro["envio_data"]) {
+        $txt_envio_data_hora = \Marabaixo\Util::formatData($registro["envio_data"]);
+        if (isset($registro["criacao_hora"]) && $registro["criacao_hora"]) {
+            $txt_envio_data_hora .= " " . $registro["criacao_hora"];
+        }
+    }
+    if (isset($registro["smtp_erro"]) && $registro["smtp_erro"]) {
+        $txt_erro = $registro["smtp_erro"];
+    }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Status de Equipe</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>ID: </dt>
+                    <dd><?php echo $txt_id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data / Hora da Criação: </dt>
+                    <dd><?php echo $txt_criacao_data_hora; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Nome do Destinatário: </dt>
+                    <dd><?php echo $txt_nome_destinatario; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>E-mail do Destinatário: </dt>
+                    <dd><?php echo $txt_email_destinatario; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Título: </dt>
+                    <dd><?php echo $txt_titulo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Conteúdo da Mensagem: </dt>
+                    <dd><?php echo $txt_conteudo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Processado: </dt>
+                    <dd><?php echo $txt_processado; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Enviado: </dt>
+                    <dd><?php echo $txt_enviado; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data / Hora do Envio: </dt>
+                    <dd><?php echo $txt_envio_data_hora; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Mensagem de Erro: </dt>
+                    <dd><?php echo $txt_erro; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

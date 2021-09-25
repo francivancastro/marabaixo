@@ -1,0 +1,111 @@
+<header class="main-header">
+    <?php if ($sistema) { ?>
+        <a href="<?php echo $this->url(null, array('controller' => 'index')); ?>" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b><?php if (isset($sistema_arquivo_logo["existe"]) && $sistema_arquivo_logo["existe"]) { ?><img src="<?php echo $this->basePath(); ?>/arquivo/view/id/<?php echo $sistema_arquivo_logo["id"]; ?>/width/40" alt="" class="img-rounded"/><?php } ?></b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b><?php echo $sistema["nome"]; ?></b></span>
+        </a>
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+                    <?php
+                    if (isset($usuario["componentes"]) && is_array($usuario["componentes"]) && count($usuario["componentes"])) {
+                        $nun_componente = count($usuario["componentes"]);
+                        ?>
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-sitemap"></i>
+                                <span class="label label-warning"><?php echo $nun_componente; ?></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header"> <?php echo $nun_componente; ?> Modulos</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul class="menu">
+                                        <?php foreach ($usuario["componentes"] as $componente) { ?>
+                                            <li>
+                                                <a href="<?php echo $this->url(null, array("controller" => "auth", "action" => "setcomponente", "id" => $componente["id_componente"])); ?>">
+                                                    <?php if ($componente["icone"]) { ?><i class="fa <?php echo $componente["icone"]; ?>"></i><?php } ?> <?php echo $componente["descricao"]; ?>
+                                                </a>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="<?php echo $this->url(null, array("controller" => "auth", "action" => "setcomponente")); ?>">ver todas</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+
+                    <?php
+                    if ($usuario) {
+                        $txt_arquivo_logo = $txt_nome = $txt_ultimo_acesso = "--";
+                        if (isset($usuario["pessoa_fisica"])) {
+                            $pf = $usuario["pessoa_fisica"];
+                            if (isset($pf["arquivo_foto"]["id"])) {
+                                $txt_usuario_logo = $this->basePath() . "/arquivo/view/id/{$pf["arquivo_foto"]["id"]}/width/128";
+                            } else {
+                                $txt_usuario_logo = $this->basePath() . "/img/usuario.png";
+                            }
+                            if ($pf["nome"]) {
+                                $txt_nome = $pf["nome"];
+                            }
+                        }
+                        if (isset($usuario["ultimo_acesso"]["log_data"])) {
+                            $txt_ultimo_acesso = \Marabaixo\Util::formatData($usuario["ultimo_acesso"]["log_data"]) . " " . $usuario["ultimo_acesso"]["log_hora"];
+                        }
+                        ?>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="<?php echo $txt_usuario_logo; ?>" class="user-image" alt="User Image"/>
+                                <span class="hidden-xs"><?php echo $txt_nome; ?></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="<?php echo $txt_usuario_logo; ?>" class="img-circle" alt="User Image" />
+                                    <p>
+                                        <?php echo $txt_nome; ?>
+                                        <small>Ultimo Acesso: <?php echo $txt_ultimo_acesso; ?></small>
+                                    </p>
+                                </li>
+                               
+                                <!-- Menu Body -->
+                                <!--
+                                <li class="user-body">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Admin.</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Prog.</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Servi.</a>
+                                    </div>
+                                </li>
+                                -->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <!-- <a href="#" class="btn btn-default btn-flat">Perfil</a> -->
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="<?php echo $this->url(null, array('controller' => 'index', 'action' => 'logout')); ?>" class="btn btn-danger btn-flat">Sair <i class="fa fa-power-off"></i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    <?php } ?>
+</header>

@@ -1,0 +1,107 @@
+<?php
+$colunas = array();
+$colunas["id"] = "ID";
+$colunas["tipo"] = "Tipo";
+$colunas["nome"] = "Nome";
+$colunas["descricao"] = "Descrição";
+$colunas["tamanho"] = "Tamanho";
+$colunas["ordem"] = "Ordem";
+$colunas["obrigatorio"] = "Obrigatório";
+$colunas["mostrar_listagem"] = "Mostrar Listagem";
+$colunas["to_string"] = "To String";
+$colunas["filtro"] = "Filtro";
+?>
+<div class="row">
+    <?php include("documentotipo.phtml"); ?>
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="titulo">
+<?php foreach ($colunas as $titulo) { ?>                            
+                            <th><?php echo $titulo; ?></th>
+<?php } ?>
+                            <th class="btn_titulo"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($this->result["registros"]) && !empty($this->result["registros"])) { ?>
+                            <?php
+                            foreach ($this->result["registros"] as $registro) {
+                                $coluna_valores = array();
+                                foreach ($colunas as $campo => $titulo) { 
+                                    $coluna_valores[$campo] = "--";
+                                }
+                                if (isset($registro["id"]) && $registro["id"]) {
+                                    $coluna_valores["id"] = $registro["id"];
+                                    $url_view = $this->url(null, array("action" => "viewcampo", "id" => $coluna_valores["id"]), true);
+                                }
+                                if (isset($registro["documento_campo_tipo"]["tostring"])) {
+                                    $coluna_valores["tipo"] = $registro["documento_campo_tipo"]["tostring"];
+                                }
+                                if (isset($registro["nome"])) {
+                                    $coluna_valores["nome"] = $registro["nome"];
+                                }
+                                if (isset($registro["descricao"])) {
+                                    $coluna_valores["descricao"] = $registro["descricao"];
+                                }
+                                if (isset($registro["tamanho"]) && $registro["tamanho"]) {
+                                    $coluna_valores["tamanho"] = $registro["tamanho"];
+                                }
+                                if (isset($registro["ordem"])) {
+                                    $coluna_valores["ordem"] = $registro["ordem"];
+                                }
+                                if (isset($registro["obrigatorio"])) {
+                                    $coluna_valores["obrigatorio"] = "NÃO";
+                                    if ($registro["obrigatorio"] == "S") {
+                                        $coluna_valores["obrigatorio"] = "SIM";
+                                    }
+                                }
+                                if (isset($registro["mostrar_listagem"])) {
+                                    $coluna_valores["mostrar_listagem"] = "NÃO";
+                                    if ($registro["mostrar_listagem"] == "S") {
+                                        $coluna_valores["mostrar_listagem"] = "SIM";
+                                    }
+                                }
+                                if (isset($registro["to_string"])) {
+                                    $coluna_valores["to_string"] = "NÃO";
+                                    if ($registro["to_string"] == "S") {
+                                        $coluna_valores["to_string"] = "SIM";
+                                    }
+                                }
+                                if (isset($registro["filtro"])) {
+                                    $coluna_valores["filtro"] = "NÃO";
+                                    if ($registro["filtro"] == "S") {
+                                        $coluna_valores["filtro"] = "SIM";
+                                    }
+                                }
+                                ?>
+                                <tr>
+<?php foreach ($colunas as $campo => $titulo) { ?>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $coluna_valores[$campo]; ?></a></td>
+<?php } ?>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editarcampo", "id" => $coluna_valores["id"]), true); ?>"><i class="fa fa-cogs"></i></a>
+                                            <a class="btn btn-default link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluircampo", "id" => $coluna_valores["id"]), true); ?>"><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+    <?php } ?>
+                <?php } else { ?>
+                            <tr>
+                                <td colspan="<?php echo count($colunas) + 1; ?>"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+                            </tr>
+<?php } ?>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+<?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+            </div>
+        </div>
+
+    </div>
+</div>

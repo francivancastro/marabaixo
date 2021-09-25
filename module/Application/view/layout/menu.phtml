@@ -1,0 +1,14 @@
+<aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            
+          <?php 
+            $xml = $app->getMenuHTML();
+            $array = \Marabaixo\Util::xml_to_array($xml);
+            if (isset($array["data"]["html"])) {
+                echo $array["data"]["html"];
+            }
+        ?>
+        </section>
+        <!-- /.sidebar -->
+</aside>

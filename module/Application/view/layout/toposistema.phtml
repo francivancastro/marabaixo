@@ -1,0 +1,126 @@
+<header class="topbar navbar navbar-inverse navbar-fixed-top inner">
+    <?php if ($sistema) { 
+    $colors = array(
+    "bg-blue", 
+    "bg-green",
+    "bg-yellow",
+    "bg-maroon",
+    "bg-aqua",
+    "bg-lime", 
+    "bg-danger",
+    "bg-fuchsia", 
+    "bg-light-blue", 
+    "bg-info", 
+    "bg-navy", 
+    "bg-olive", 
+    "bg-orange", 
+    "bg-primary", 
+    "bg-purple", 
+    "bg-red", 
+    "bg-success", 
+    "bg-teal", 
+    "bg-warning", 
+    "bg-gray"
+    );
+    $cont = -1;
+    ?>
+    <!-- start: TOPBAR CONTAINER -->
+    <div class="container">
+            <div class="navbar-header">
+                    <a class="sb-toggle-left hidden-md hidden-lg" href="#main-navbar">
+                            <i class="fa fa-bars"></i>
+                    </a>
+                    <!-- start: LOGO -->
+                    <a class="navbar-brand" href="<?php echo $this->url(null, array('controller' => 'index')); ?>">
+                        <?php if (isset($sistema_arquivo_logo["existe"]) && $sistema_arquivo_logo["existe"]) { ?><img src="<?php echo $this->basePath(); ?>/arquivo/view/id/<?php echo $sistema_arquivo_logo["id"]; ?>/width/80" alt="<?php echo $sistema["nome"]; ?>" class="img-rounded pull-left"/><?php } ?>
+                        <span style="margin-left: 10px"><?php echo $sistema["nome"]; ?>  </span>  
+                    </a>
+                    <!-- end: LOGO -->
+            </div>
+            <div class="topbar-tools">
+                  
+                    <ul class="nav navbar-right">
+                    <?php
+                    if ($usuario) {
+                        $txt_arquivo_logo = $txt_nome = $txt_ultimo_acesso = "--";
+                        if (isset($usuario["pessoa_fisica"])) {
+                            $pf = $usuario["pessoa_fisica"];
+                            if (isset($pf["arquivo_foto"]["id"])) {
+                                $txt_usuario_logo = $this->basePath() . "/arquivo/view/id/{$pf["arquivo_foto"]["id"]}/width/50";
+                            } else {
+                                $txt_usuario_logo = $this->basePath() . "/img/usuario.png";
+                            }
+                            if ($pf["nome"]) {
+                                $txt_nome = Marabaixo\Util::abreviaNome($pf["nome"]);
+                            }
+                        }
+                        if (isset($usuario["ultimo_acesso"]["log_data"])) {
+                            $txt_ultimo_acesso = \Marabaixo\Util::formatData($usuario["ultimo_acesso"]["log_data"]) . " " . $usuario["ultimo_acesso"]["log_hora"];
+                        }
+                        ?>
+                            <li class="dropdown current-user">
+                                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
+                                        <img src="<?php echo $txt_usuario_logo; ?>" class="img-circle" alt="" width="30"> <span class="username hidden-xs"><?php echo $txt_nome; ?></span> <i class="fa fa-caret-down "></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-dark">
+                                            <li>
+                                                    <a href="#">
+                                                            <?php echo $txt_nome; ?>
+                                                    </a>
+                                            </li>
+                                            <li>
+                                                    <a href="#">
+                                                            <small>Ultimo Acesso: <?php echo $txt_ultimo_acesso; ?></small>
+                                                    </a>
+                                            </li>
+                                            <li>
+                                                    <a href="<?php echo $this->url(null, array('controller' => 'index', 'action' => 'logout')); ?>">
+                                                            Log Out
+                                                    </a>
+                                            </li>
+                                    </ul>
+                                <?php } ?>
+                            </li>
+                        <?php
+                            if (isset($usuario["componentes"]) && is_array($usuario["componentes"]) && count($usuario["componentes"])) {
+                                $nun_componente = count($usuario["componentes"]);
+                        ?>
+                            <li class="right-menu-toggle">
+                                    <a href="#" class="sb-toggle-right" data-toggle="modal" data-target="#componente">
+                                        <i class="fa fa-th"></i> 
+                                    </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                    <!-- end: TOP NAVIGATION MENU -->
+            </div>
+    </div>
+    <?php } ?>
+</header>
+
+<!-- Modal -->
+<div class="modal fade" id="componente" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Componentes Disponíveis</h4>
+      </div>
+      <div class="modal-body">
+        <?php 
+        foreach ($usuario["componentes"] as $componente) {
+            $cont++;
+            ?>
+            <a class="btn btn-app <?php echo $colors[$cont];?>" href="<?php echo $this->url(null, array("controller" => "auth", "action" => "setcomponente", "id" => $componente["id_componente"])); ?>">
+                <?php if ($componente["icone"]) { ?><i class="fa <?php echo $componente["icone"]; ?>"></i><?php } ?> <?php echo $componente["descricao"]; ?>
+            </a>
+        <?php } ?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i></button>
+        <a class="btn btn-default" href="<?php echo $this->url(null, array("controller" => "auth", "action" => "setcomponente")); ?>">Ver todos</a>
+      </div>
+    </div>
+  </div>
+</div>
+

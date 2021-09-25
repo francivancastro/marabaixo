@@ -1,0 +1,74 @@
+<?php
+$controllers = false;
+$txt_componente = "--";
+if (isset($this->componente["tostring"])) {
+    $txt_componente = $this->componente["tostring"];
+}
+if (isset($this->componente["controllers"]) && !empty($this->componente["controllers"])) {
+    $controllers = $this->componente["controllers"];
+}
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".link_controller").click(function(ev) {
+            ev.preventDefault();
+            var id = $(this).attr("id");
+            if (id) {
+                var ctrl = $("#id_controller_" + id);
+                if (ctrl && ctrl.length) {
+                    var checked = ctrl.prop("checked");
+                    if (checked) {
+                        ctrl.prop("checked", false);
+                    } else {
+                        ctrl.prop("checked", true);
+                    }
+                }
+            }
+        });
+    });
+</script>
+<div class="row">
+<form action="<?php echo $this->url(null, array(), true); ?>" method="post" id="formulario">
+    <input type="hidden" name="id_componente" id="id_componente" value="<?php echo $this->componente["id"]; ?>" />
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Vincular Controllers</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                <dt>Componente: </dt>
+                <dd><?php echo $txt_componente; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Controllers: </dt>
+                <dd>
+            <ul>
+    <?php foreach ($this->controllers as $controller) { 
+        $id = $txt_controller = $checked = "";
+        if (isset($controller["id"])) {
+            $id = $controller["id"];
+        }
+        if (isset($controller["tostring"])) {
+            $txt_controller = $controller["tostring"];
+        }
+        if ($controllers) {
+            foreach ($controllers as $con) {
+                if ($con["id"] == $id) {
+                    $checked = " checked ";
+                }
+            }
+        }
+    ?>
+                <li><input <?php echo $checked; ?> type="checkbox" name="id_controller[]" id="id_controller_<?php echo $id; ?>" value="<?php echo $id; ?>" /> <a href="#" class="link_controller" id="<?php echo $id; ?>"><?php echo $txt_controller; ?></a></li>
+    <?php } ?>
+            </ul>
+                </dd>
+            </dl>    
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+            </div>
+        </div>
+    </div>
+</form>
+</div>

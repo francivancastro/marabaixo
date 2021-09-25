@@ -1,0 +1,59 @@
+
+<div class="container-fluid">
+<h3>Componentes Disponíveis</h3>
+<div class="row">
+    
+    
+<?php 
+$colors = array(
+    "bg-blue", 
+    "bg-green", 
+    "bg-yellow", 
+    "bg-aqua", 
+    "bg-maroon", 
+    "bg-lime", 
+    "bg-danger",
+    "bg-fuchsia", 
+    "bg-light-blue", 
+    "bg-info", 
+    "bg-navy", 
+    "bg-olive", 
+    "bg-orange", 
+    "bg-primary", 
+    "bg-purple", 
+    "bg-red", 
+    "bg-success", 
+    "bg-teal", 
+    "bg-warning", 
+    
+    "bg-gray"
+    );
+if ($this->componentes && is_array($this->componentes)) {
+    $cont = -1;
+    foreach ($this->componentes as $comp) {
+        
+        $cont++;
+        $txt_id = "";
+        $txt_descricao = "";
+        $txt_icone = "fa-imagem";
+        if (isset($comp["id_componente"])) { $txt_id = $comp["id_componente"]; }
+        if (isset($comp["descricao"])) { $txt_descricao = $comp["descricao"]; }
+        if (isset($comp["icone"])) { $txt_icone = $comp["icone"]; }
+?>
+        <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box <?php echo $colors[$cont];?> " style="z-index: 2">
+            <div class="inner">
+              <h3><?php echo $txt_descricao; ?></h3>
+              <p><br /></p>
+            </div>
+            <div class="icon">
+              <i class="fa <?php echo $txt_icone; ?>"></i>
+            </div>
+              <a href="<?php echo $this->url(null, array("controller" => "auth", "action" => "setcomponente", "id" => $comp["id_componente"])); ?>" class="small-box-footer">Escolher Este <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+<?php } ?>
+<?php } ?>
+    </div>
+    </div>

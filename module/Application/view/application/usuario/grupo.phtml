@@ -1,0 +1,97 @@
+<?php
+$txt_usuario_id = $txt_usuario = "";
+if (isset($this->usuario)) {
+    $usuario = $this->usuario;
+    if (isset($usuario["tostring"])) {
+        $txt_usuario = $usuario["tostring"];
+    }
+    if (isset($usuario["id"])) {
+        $txt_usuario_id = $usuario["id"];
+    }
+}
+$this->inlineScript()->captureStart();
+?>
+    $(document).ready(function() {
+        $(".link_grupo").click(function(ev) {
+            ev.preventDefault();
+            
+            var id = $(this).prop("id");
+            if (id) {
+                var ctrl = $(".id_grupo[value=" + id + "]");
+                if (ctrl && ctrl.length) {
+                    var checked = ctrl.prop("checked");
+                    if (checked) {
+                        ctrl.prop("checked", false);
+                    } else {
+                        ctrl.prop("checked", true);
+                    }
+                }
+            }
+        });
+    });
+    
+    function salvar() {
+        $("#formulario").submit();
+    }
+<?php
+$this->inlineScript()->captureEnd();
+?>
+</script>
+<div class="row">
+<div class="col-md-12">
+    <form action="" method="post" id="formulario" class="form-horizontal">
+        <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $txt_usuario_id; ?>" />
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Atribuir Permissões de Grupo</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+<div class="form-group">
+                <label for="" class="col-sm-2 control-label">Usuário: </label>
+                <div class="controls">
+                    <div class="col-sm-6">
+                        <input type="text" name="" id="" value="<?php echo $txt_usuario; ?>" disabled="true" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">Selecione o(s) Grupo(s): </label>
+                <div class="controls">
+                    <div class="col-sm-6">
+                        <ul>
+<?php if (isset($this->grupos)) { ?>
+<?php 
+foreach ($this->grupos as $grupo) { 
+    $checked = "";
+    $txt_id = $txt_grupo = "";
+    if (isset($grupo["id"]) && $grupo["id"]) {
+        $txt_id = $grupo["id"];
+    }
+    if (isset($grupo["tostring"]) && $grupo["tostring"]) {
+        $txt_grupo = $grupo["tostring"];
+    }
+    if ($txt_id) {
+        if (isset($usuario["grupos"]) && $usuario["grupos"]) {
+            foreach ($usuario["grupos"] as $usuario_grupo) {
+                if ($usuario_grupo["id_grupo"]) {
+                    if ($txt_id == $usuario_grupo["id_grupo"]) {
+                        $checked = " checked ";
+                        break;
+                    }
+                }
+            }
+        }
+    }
+?>
+                            <li><input type="checkbox" class="id_grupo" name="id_grupo[]" id="id_grupo_<?php echo $txt_id; ?>" value="<?php echo $txt_id; ?>" <?php echo $checked ?> /> <a href="#" class="link_grupo" id="<?php echo $txt_id; ?>"><?php echo $txt_grupo; ?></a></li>
+<?php } ?>
+<?php } ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+    </form>
+</div>
+</div>

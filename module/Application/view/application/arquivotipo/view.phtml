@@ -1,0 +1,58 @@
+<?php
+$txt_id = $txt_mime_type = $txt_descricao = $txt_extensao = $txt_arquivo = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_descricao = $registro["tostring"]; }
+    if (isset($registro["mime_type"]) && $registro["mime_type"]) { $txt_mime_type = $registro["mime_type"]; }
+    if (isset($registro["extensao"]) && $registro["extensao"]) { $txt_extensao = $registro["extensao"]; }
+    if (isset($registro["padrao"]) && $registro["padrao"]) { 
+        $txt_padrao = "NÃO"; 
+        if ($registro["padrao"] == "S") {
+            $txt_padrao = "SIM"; 
+        }
+    }
+    if (isset($registro["arquivo"]["id"]) && $registro["arquivo"]["id"]) {
+        $txt_arquivo = "<img src='{$this->basePath()}/arquivo/view/id/{$registro["arquivo"]["id"]}/width/100' class='img-rounded' />";
+    }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Tipo de Arquivo</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+            <dl class="dl-horizontal">
+                <dt>ID: </dt>
+                <dd><?php echo $txt_id; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Mime Type: </dt>
+                <dd><?php echo $txt_mime_type; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Descrição: </dt>
+                <dd><?php echo $txt_descricao; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Extensão: </dt>
+                <dd><?php echo $txt_extensao; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Padrão: </dt>
+                <dd><?php echo $txt_padrao; ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Arquivo: </dt>
+                <dd><?php echo $txt_arquivo; ?></dd>
+            </dl>
+            </div>
+        </div>
+    </div>
+</div>

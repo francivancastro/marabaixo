@@ -1,0 +1,99 @@
+<div class="row">
+<form action="" method="post" class="form-horizontal" id="pesquisa_form">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Formulário de Pesquisa</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+            <div class="form-group">
+                <label for="pesquisa_descricao" class="col-sm-2 control-label">Descrição: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="text" name="pesquisa_descricao" id="pesquisa_descricao" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_descricao"]; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="pesquisa_controller" class="col-sm-2 control-label">Chave: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="text" name="pesquisa_chave" id="pesquisa_chave" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_chave"]; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="col-sm-2 control-label"></label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="submit" value="Procurar" class="btn btn-primary" />
+                        <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-md-12">
+    <div class="box">
+        <div class="box-body">
+            <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="titulo">
+                    <th width="60px">ID</th>
+                    <th>Descrição</th>
+                    <th>Chave</th>
+                    <th>Administrador</th>
+                    <th>Status</th>
+                    <th class="btn_titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php if (isset($this->result["registros"])) { ?>
+<?php 
+foreach ($this->result["registros"] as $registro) {
+    $txt_id = $txt_descricao = $txt_chave = $txt_administrador = $txt_status = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["descricao"]) && $registro["descricao"]) { $txt_descricao = $registro["descricao"]; }
+    if (isset($registro["chave"]) && $registro["chave"]) { $txt_chave = $registro["chave"]; }
+    if (isset($registro["administrador"]["descricao"]) && $registro["administrador"]["descricao"]) { $txt_administrador = $registro["administrador"]["descricao"]; }
+    if (isset($registro["status"]["descricao"]) && $registro["status"]["descricao"]) { $txt_status = $registro["status"]["descricao"]; }
+?>
+            <tr>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_descricao; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_chave; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_administrador; ?></a></td>
+                <td><a href="<?php echo $url_view; ?>"><?php echo $txt_status; ?></a></td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                        <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editar", "id" => $txt_id), true); ?>"><i class="fa fa-cogs"></i></a>
+                        <a class="btn btn-default link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluir", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i></a>
+                        <a class="btn btn-default" title="Atribuir Permissões" href="<?php echo $this->url(null, array("action" => "permissao", "id" => $txt_id), true); ?>"><i class="fa fa-key"></i></a>
+                        <a class="btn btn-default" title="Vincular Usuários" href="<?php echo $this->url(null, array("action" => "usuario", "id" => $txt_id), true); ?>"><i class="fa fa-group"></i></a>
+                    </div>
+                </td>
+            </tr>
+<?php } ?>
+<?php } else { ?>
+            <tr>
+                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+            </tr>
+<?php } ?>
+            </tbody>
+        </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer clearfix">
+            <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+        </div>
+    </div>
+    </div>
+
+</div>
+</div>

@@ -1,0 +1,88 @@
+<?php
+$estrangeiro = false;
+$txt_id = $txt_nome = $txt_email = $txt_nacionalidade = $txt_cpf = $txt_passaporte = $txt_data_nascimento = $txt_pais = $txt_status = $txt_grupo = "--";
+$txt_id_arquivo_foto = "";
+if (isset($this->result["id"])) { $txt_id = $this->result["id"]; }
+if (isset($this->result["pessoa_fisica"]["nome"])) { $txt_nome = $this->result["pessoa_fisica"]["nome"]; }
+if (isset($this->result["pessoa_fisica"]["cpf"])) { $txt_cpf = \Marabaixo\Util::formatCpf($this->result["pessoa_fisica"]["cpf"]); }
+if (isset($this->result["pessoa_fisica"]["passaporte"])) { $txt_passaporte = $this->result["pessoa_fisica"]["passaporte"]; }
+if (isset($this->result["pessoa_fisica"]["pessoa"]["email"])) { $txt_email = $this->result["pessoa_fisica"]["pessoa"]["email"]; }
+if (isset($this->result["pessoa_fisica"]["data_nascimento"])) { $txt_data_nascimento = $this->result["pessoa_fisica"]["data_nascimento"]; }
+if (isset($this->result["status"]["descricao"])) { $txt_status = $this->result["status"]["descricao"]; }
+
+if (isset($this->result["pessoa_fisica"]["nacionalidade"]["descricao"])) { $txt_nacionalidade = $this->result["pessoa_fisica"]["nacionalidade"]["descricao"]; }
+if (isset($this->result["pessoa_fisica"]["pais"]["descricao"])) { $txt_pais = $this->result["pessoa_fisica"]["pais"]["descricao"]; }
+if (isset($this->result["pessoa_fisica"]["arquivo_foto"]["id"])) { $txt_id_arquivo_foto = $this->result["pessoa_fisica"]["arquivo_foto"]["id"]; }
+
+if (isset($this->result["grupos"]) && !empty($this->result["grupos"])) {
+    $txt = array();
+    foreach ($this->result["grupos"] as $obj) {
+        if (isset($obj["tostring"])) {
+            $txt[] = $obj["tostring"];
+        }
+    }
+    $txt_grupo = "<ul><li>" . implode("</li><li>", $txt) . "</li></ul>";
+}
+if (isset($this->result["pessoa_fisica"]["estrangeiro"])) {
+    $estrangeiro = $this->result["pessoa_fisica"]["estrangeiro"];
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Usuário</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+                        <dt>ID: </dt>
+                        <dd><?php echo $txt_id; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Nome: </dt>
+                        <dd><?php echo $txt_nome; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>E-mail: </dt>
+                        <dd><?php echo $txt_email; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Nacionalidade: </dt>
+                        <dd><?php echo $txt_nacionalidade; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>País: </dt>
+                        <dd><?php echo $txt_pais; ?></dd>
+                    </dl>
+            <?php if (!$estrangeiro) { ?>
+                    <dl class="dl-horizontal">
+                        <dt>C.P.F.: </dt>
+                        <dd><?php echo $txt_cpf; ?></dd>
+                    </dl>
+            <?php } ?>
+                    <dl class="dl-horizontal">
+                        <dt>Passaporte: </dt>
+                        <dd><?php echo $txt_passaporte; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Data de Nascimento: </dt>
+                        <dd><?php echo $txt_data_nascimento; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Status: </dt>
+                        <dd><?php echo $txt_status; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Grupo(s): </dt>
+                        <dd><?php echo $txt_grupo; ?></dd>
+                    </dl>
+                </div>
+<?php if ($txt_id_arquivo_foto) { ?>
+                <div class="col-md-2">
+                    <img src="<?php echo $this->basePath(); ?>/arquivo/view/id/<?php echo $txt_id_arquivo_foto; ?>/width/200" alt="" class="img-rounded" width="200" />
+                </div>
+<?php } ?>
+    </div>
+</div>
+    </div>
+</div>

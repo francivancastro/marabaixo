@@ -1,0 +1,13 @@
+<div id="horizontal-menu" class="navbar navbar-inverse hidden-sm hidden-xs inner">
+    <div class="container">
+        <div class="navbar-collapse">
+            <?php 
+                $xml = $app->getMenuHTML();
+                $array = \Marabaixo\Util::xml_to_array($xml);
+                if (isset($array["data"]["html"])) {
+                    echo $array["data"]["html"];
+                }
+            ?>
+        </div>
+    </div>
+</div>

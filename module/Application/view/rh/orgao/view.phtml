@@ -1,0 +1,46 @@
+<?php
+$txt_id = $txt_codigo = $txt_descricao = $txt_orgaoSuperior = $txt_portaria = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["codigo"]) && $registro["codigo"]) { $txt_codigo = $registro["codigo"]; }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_descricao = $registro["tostring"]; }
+    if (isset($registro["portaria"]) && $registro["portaria"]) { $txt_portaria = $registro["portaria"]; }
+    if (isset($registro["orgaoSuperior"]['id']) && $registro["orgaoSuperior"]['id']) { $txt_orgaoSuperior = $registro["orgaoSuperior"]['tostring']; }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Orgão</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>ID: </dt>
+                    <dd><?php echo $txt_id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Código: </dt>
+                    <dd><?php echo $txt_codigo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição: </dt>
+                    <dd><?php echo $txt_descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Portaria: </dt>
+                    <dd><?php echo $txt_portaria; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Orgão Superior: </dt>
+                    <dd><?php echo $txt_orgaoSuperior; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

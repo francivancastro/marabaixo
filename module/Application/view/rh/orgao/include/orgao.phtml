@@ -1,0 +1,28 @@
+<?php 
+$sm = $this->getHelperPluginManager()->getServiceLocator();
+$app = $sm->get("AplicacaoFachada");
+
+//validando região atual
+$xml = $app->getOrgaoAtual();
+$result = \Marabaixo\Util::xml_to_array($xml);
+
+$regiao_atual = false;
+if (isset($result["data"]) && !empty($result["data"])) {
+    $orgao_atual = $result["data"];
+    $txt_orgao_atual = "--";
+    if (isset($orgao_atual["tostring"])) {
+        $txt_orgao_atual = $orgao_atual["tostring"];
+    }
+?>
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Orgão Atual</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>Região Atual:</dt>
+            <dd><?php echo $txt_orgao_atual; ?></dd>
+        </dl>
+    </div>
+</div>
+<?php }

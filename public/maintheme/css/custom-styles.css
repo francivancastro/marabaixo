@@ -1,0 +1,109 @@
+
+.navigation { 
+    margin-top:40px; 
+}
+.navigation .navbar { 
+        padding: 0;
+    margin: 0;
+    background: #FFF;
+    border-bottom: 1px solid #d0d0d0;
+	float:right; background:#f8f8f8;
+	border-bottom: 1px dotted #a9a9a9;
+	border-top: 1px dotted #a9a9a9;
+}
+.navbar .nav > li > a { 
+	font-family: "Oswald", sans-serif; 
+	font-weight: normal;
+	text-shadow: none; 
+	text-transform:uppercase; 
+	font-size:12px; 
+	padding: 5px 10px 5px;
+}
+
+/* Portrait tablet */
+@media (min-width: 768px) and (max-width: 979px) {
+	.navbar .nav > li > a {padding: 10px 10px 10px;}
+}
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus {
+    color:#487B7C; 
+    background-color:rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;  
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  	color:#487B7C; 
+    background-color:rgba(0, 0, 0, 0.08);
+    
+}
+
+ul.nav li.dropdown:hover ul.dropdown-menu{ display: block; }
+.dropdown-menu{
+    font-family: "Oswald", sans-serif; 
+    font-weight: normal;
+    font-size:12px;
+    padding: 0px;
+    margin: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+}
+.navbar .nav > li > .dropdown-menu:before {
+  border-right: 0px;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-bottom-color: none;
+}
+.dropdown-menu a {
+	color: #ababab; 
+	padding: 10px 10px;
+	margin:0px 10px;
+}
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a {
+  color: #487B7C;
+  text-decoration: none;
+  background-color:rgba(0, 0, 0, 0.08);
+  background-image: none;
+  filter: none;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
+}
+.navbar .nav > li > .dropdown-menu:before,
+.navbar .nav > li > .dropdown-menu:after {
+  display: none;
+}
+
+.navbar{
+    min-height: 30px;
+    border-radius: 0px;
+    margin-bottom: 0px;
+    
+}
+.navbar-brand{
+    height: 30px;
+    padding: 6px 6px;
+}
+
+.breadcrumb {
+    padding-left: 0px;
+    margin-left: 0px;
+    background: transparent;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+    border-radius: 2px;
+}
+.breadcrumb > li + li:before {
+    content: '>\00a0';
+}

@@ -1,0 +1,87 @@
+<?php
+$txt_id = $txt_chave = $txt_descricao = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["usuario"]["tostring"]) && $registro["usuario"]["tostring"]) { $txt_nome = $registro["usuario"]["tostring"]; }
+    if (isset($registro["matricula"]) && $registro["matricula"]) { $txt_matricula = $registro["matricula"]; }
+    if (isset($registro["identificacao_unica"]) && $registro["identificacao_unica"]) { $txt_identificacao_unica = $registro["identificacao_unica"]; }
+    if (isset($registro["data_ingresso"]) && $registro["data_ingresso"]) { $txt_data_ingresso = $registro["data_ingresso"]; }
+    if (isset($registro["data_ultima_alteracao"]) && $registro["data_ultima_alteracao"]) { $txt_data_ultima_alteracao = $registro["data_ultima_alteracao"]; }
+    if (isset($registro["carga_horaria"]) && $registro["carga_horaria"]) { $txt_carga_horaria = $registro["carga_horaria"]; }
+    if (isset($registro["orgao"]) && $registro["orgao"]) { $txt_orgao = $registro["orgao"]["tostring"]; }
+    if (isset($registro["servidor_cargo"]) && $registro["servidor_cargo"]) { $txt_servidor_cargo = $registro["servidor_cargo"]["tostring"]; }
+    if (isset($registro["servidor_classe"]) && $registro["servidor_classe"]) { $txt_servidor_classe = $registro["servidor_classe"]["tostring"]; }
+    if (isset($registro["servidor_funcao"]) && $registro["servidor_funcao"]) { $txt_servidor_funcao = $registro["servidor_funcao"]["tostring"]; }
+    if (isset($registro["servidor_nivel"]) && $registro["servidor_nivel"]) { $txt_servidor_nivel = $registro["servidor_nivel"]["tostring"]; }
+    if (isset($registro["regime_juridico"]) && $registro["regime_juridico"]) { $txt_regime_juridico = $registro["regime_juridico"]["tostring"]; }
+    if (isset($registro["servidor_situacao"]) && $registro["servidor_situacao"]) { $txt_servidor_situacao = $registro["servidor_situacao"]["tostring"]; }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Servidor</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>ID: </dt>
+                    <dd><?php echo $txt_id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Nome: </dt>
+                    <dd><?php echo $txt_nome; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Matricula: </dt>
+                    <dd><?php echo $txt_matricula; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Identificação Unica: </dt>
+                    <dd><?php echo $txt_identificacao_unica; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data Ingresso: </dt>
+                    <dd><?php echo $txt_data_ingresso; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Carga Horária: </dt>
+                    <dd><?php echo $txt_carga_horaria; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Orgão: </dt>
+                    <dd><?php echo $txt_orgao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Cargo: </dt>
+                    <dd><?php echo $txt_servidor_cargo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Classe: </dt>
+                    <dd><?php echo $txt_servidor_classe; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Função: </dt>
+                    <dd><?php echo $txt_servidor_funcao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Nivel: </dt>
+                    <dd><?php echo $txt_servidor_nivel; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Regime Jurídico: </dt>
+                    <dd><?php echo $txt_regime_juridico; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Situação: </dt>
+                    <dd><?php echo $txt_servidor_situacao; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

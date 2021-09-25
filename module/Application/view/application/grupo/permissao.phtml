@@ -1,0 +1,311 @@
+<?php
+$txt_grupo = "";
+if ($this->grupo["descricao"]) {
+    $txt_grupo = $this->grupo["descricao"];
+}
+$this->inlineScript()->CaptureStart(); 
+?>
+    var ajax_permissao = false;
+    var modulos = [];
+    var id_grupo = "<?php echo $this->grupo["id"]; ?>";
+    var id_controller = 0;
+    var grupo_actions = [];
+<?php if (isset($this->grupo["actions"]) && !empty($this->grupo["actions"])) { ?>
+<?php foreach ($this->grupo["actions"] as $ca) { ?>
+    grupo_actions.push(<?php echo $ca["id"]; ?>);
+<?php } ?>
+<?php } ?>
+    $(document).ready(function() {
+        $(".link_permissao").click(function(ev) {
+            ev.preventDefault();
+            try {
+                $.clearAllMessage();
+                
+                $("#lista_id_controller_action").prop("checked", false);
+                
+                var id = $(this).attr("id");
+                if (!id) {
+                    throw { "message": "Falha ao Executar Operação, Dados Inválidos!"};
+                }
+                if (ajax_permissao) {
+                    ajax_permissao.abort();
+                }
+                var ajax_permissao = $.ajax("<?php echo $this->url(null, array("controller" => "modulo", "action" => "listar")); ?>", {
+                    "type": "post",
+                    "dataType" : "json",
+                    "data" : { "id_controller" : id }
+                });
+                ajax_permissao.done(function(response) {
+                    try {
+                        if (!response) {
+                            throw { "message": "Falha ao Executar Operação, Dados Inválidos!!"};
+                        }
+                        var modulo = false;
+                        $(modulos).each(function(idc, obj) {
+                            if (obj.id == id) {
+                                modulo = obj;
+                                return;
+                            }
+                        });
+                        if (!modulo) {
+                            throw { "message": "Falha ao Executar Operação, Dados Inválidos!!!"};
+                        }
+                        
+                        id_modulo = id;
+                        $("#txt_modulo").text(modulo.descricao);
+                        
+                        if (!response.length) {
+                            throw { "message": "Falha ao Executar Operação, Módulo não possui nenhuma Operação!!!!"};
+                        }
+                        $("#modal_permissao table tbody tr").remove();
+                        for (var i = 0; i < response.length; i++) {
+                            var obj = response[i];
+                            var tr = $("<tr>");
+                                
+                            var checked = " ";
+                                                        
+                            if ($.inArray(parseInt(obj.id), grupo_actions) != -1) {
+                                checked = " checked ";
+                            }
+                                
+                            tr.appendTo($("#modal_permissao table tbody"));
+                            $('<td class="text-center"><input ' + checked + ' type="checkbox" name="id_controller_action[]" class="lista_id_controller_action" id="id_controller_action_' + obj.id + '" value="' + obj.id + '" /></td>').appendTo(tr);
+                            $('<td><a href="#" id="' + obj.id + '" class="link_controller_action">' + obj.descricao + '</a></td>').appendTo(tr);
+                            $('<td><a href="#" id="' + obj.id + '" class="link_controller_action">' + obj.action + '</a></td>').appendTo(tr);
+                        }
+                        $(".link_controller_action").on("click", function(ev) {
+                            ev.preventDefault();
+                            var id = $(this).prop("id");
+                            if (id) {
+                                var ctrl = $("#id_controller_action_" + id);
+                                if (ctrl && ctrl.length) {
+                                    ctrl.prop("checked", !ctrl.prop("checked"));
+                                }
+                            }
+                        });
+                        $("#modal_permissao").modal();
+                    } catch (ex) {
+                        $.clearAllMessage();
+                        $.addErrorMessage(ex.message);
+                    }
+                });
+            } catch (ex) {
+                $.clearAllMessage();
+                $.addErrorMessage(ex.message);
+            }
+        });
+        
+        $("#btn_atribuir_permissoes").click(function() {
+            try {
+                $.clearAllMessage();
+            
+                if (!id_grupo) {
+                    throw { "message": "Falha ao Executar Operação, Dados Inválidos!!!!"};
+                }
+                
+                var ids = [];
+                var objs = $(".lista_id_controller_action:checked");
+                if (objs && objs.length) {
+                    objs.each(function(idc, obj) {
+                        ids.push($(obj).val());
+                    });
+                }
+                
+                if (ajax_permissao) {
+                    ajax_permissao.abort();
+                }
+                var ajax_permissao = $.ajax("<?php echo $this->url(null, array("controller" => "grupo", "action" => "salvarpermissao")); ?>", {
+                    "type": "post",
+                    "dataType" : "json",
+                    "data" : { "id_grupo" : id_grupo, "id_controller" : id_modulo, "id_controller_action" : ids }
+                });
+                ajax_permissao.done(function(response) {
+                    try {
+                        if (!response) {
+                            throw { "message": "Falha ao Executar Operação, Dados Inválidos!!" };
+                        }
+                        if (response.errors && response.errors.length) {
+                            $(response.errors).each(function(idc, obj) {
+                                $.addErrorMessage(obj);
+                            });
+                        } else {
+                            var obj = response.data;
+                            grupo_actions = [];
+                            if (obj.actions && obj.actions.length) {
+                                $(obj.actions).each(function(idc, obj) {
+                                    grupo_actions.push(parseInt(obj.id));
+                                });
+                            }
+                            $.clearAllMessage();
+                            $.addSuccessMessage("Operação Efetuada com Sucesso!");
+                        }
+                    } catch (ex) {
+                        $.clearAllMessage();
+                        $.addErrorMessage(ex.message);
+                    }
+                    $("#modal_permissao").modal("hide");
+                });
+            } catch (ex) {
+                $("#modal_permissao").modal("hide");
+                $.clearAllMessage();
+                $.addErrorMessage(ex.message);
+            }
+        });
+    });
+<?php $this->inlineScript()->CaptureEnd(); ?>
+<div class="row">
+<div class="col-md-12">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Atribuir Permissão</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <dl class="dl-horizontal">
+                <dt>Grupo: </dt>
+                <dd><?php echo $txt_grupo; ?></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<form action="" method="post" class="form-horizontal" id="pesquisa_form">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Formulário de Pesquisa</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="form-group">
+                <label for="pesquisa_descricao" class="col-sm-2 control-label">Nome do Módulo: </label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="text" name="pesquisa_descricao" id="pesquisa_descricao" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_descricao"]; ?>" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="col-sm-2 control-label"></label>
+                <div class="controls">
+                    <div class="col-sm-4">
+                        <input type="submit" value="Procurar" class="btn btn-primary" />
+                        <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Bordered Table</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="titulo">
+                    <th colspan="4">Módulos</th>
+                </tr>
+                <tr class="titulo">
+                    <th width="60px">ID</th>
+                    <th>Descrição</th>
+                    <th>Controller</th>
+                    <th class="btn_titulo"></th>
+                </tr>
+            </thead>
+            <tbody>
+<?php if (isset($this->modulos["registros"])) { ?>
+<?php 
+foreach ($this->modulos["registros"] as $registro) {
+    $txt_id = $txt_descricao = $txt_controller = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+    }
+    if (isset($registro["descricao"]) && $registro["descricao"]) { $txt_descricao = $registro["descricao"]; }
+    if (isset($registro["controller"]) && $registro["controller"]) { $txt_controller = $registro["controller"]; }
+    
+    $this->inlineScript()->CaptureStart();
+?>
+                    var obj = { "id" : "<?php echo $txt_id; ?>", "descricao" : "<?php echo $txt_descricao; ?>" };
+                    modulos.push(obj);
+<?php $this->inlineScript()->captureEnd(); ?>
+            <tr>
+                <td><?php echo $txt_id; ?></td>
+                <td><?php echo $txt_descricao; ?></td>
+                <td><?php echo $txt_controller; ?></td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-default link_permissao" title="Visualizar" href="#" id="<?php echo $txt_id; ?>" >Atribuir Permissão</a>
+                    </div>
+                </td>
+            </tr>
+<?php } ?>
+<?php } else { ?>
+            <tr>
+                <td colspan="4"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+            </tr>
+<?php } ?>
+            </tbody>
+        </table>
+    </div><!-- /.box-body -->
+    <div class="box-footer clearfix">
+        <?php echo $this->partial("layout/pagination", array("result" => $this->modulos)); ?>
+    </div>
+</div>
+
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_permissao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Grupos >> Atribuir Permissão</h4>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; height: 35em;">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Administrador</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <dl class="dl-horizontal">
+                            <dt>Módulo: </dt>
+                            <dd id="txt_modulo">Administrador</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Bordered Table</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="titulo"> 
+                            <th colspan="3">Permissões do Grupo - <span id="txt_grupo"><?php echo $txt_grupo; ?></span></th>
+                        </tr>
+                        <tr class="titulo">
+                            <th class="text-center"><input type="checkbox" name="ck" id="lista_id_controller_action" class="marca-todos" /></th>
+                            <th>Operação</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center"><input type="checkbox" name="" id="" /></td>
+                            <td>Index</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btn_atribuir_permissoes">Atribuir Permissões</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<?php
+$txt_id = $txt_icone = $txt_imagem = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_icone = $registro["tostring"]; }
+    if (isset($registro["icone"]) && $registro["icone"]) { $txt_imagem = "<i class='fa {$registro["icone"]}'></i>"; }
+}
+?>
+<div class="row">
+<div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Ícone</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>ID: </dt>
+            <dd><?php echo $txt_id; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Imagem: </dt>
+            <dd><?php echo $txt_imagem; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Ícone: </dt>
+            <dd><?php echo $txt_icone; ?></dd>
+        </dl>
+    </div>
+</div>
+</div>
+</div>

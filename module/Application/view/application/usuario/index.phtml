@@ -1,0 +1,125 @@
+<div class="row">
+    <form action="" method="post" class="form-horizontal" id="pesquisa_form">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Formulário de Pesquisa</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="pesquisa_nome" class="col-sm-2 control-label">Nome: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_nome" id="pesquisa_nome" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_nome"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_email" class="col-sm-2 control-label">E-mail: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_email" id="pesquisa_email" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_email"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_cpf" class="col-sm-2 control-label">C.P.F.: </label>
+                        <div class="controls">
+                            <div class="col-sm-2">
+                                <input type="text" name="pesquisa_cpf" id="pesquisa_cpf" class="form-control pesquisa_field mask_cpf" value="<?php echo $this->pesquisa_dados["pesquisa_cpf"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_status" class="col-sm-2 control-label">Status: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <select name="pesquisa_status" id="pesquisa_status" class="form-control pesquisa_field">
+                                    <option value="" <?php echo (!$this->pesquisa_dados["pesquisa_status"]) ? "selected" : ""; ?>>==> SELECIONE <==</option>
+                                    <option value="A" <?php echo ($this->pesquisa_dados["pesquisa_status"] == "A") ? "selected" : ""; ?>>ATIVO</option>
+                                    <option value="I" <?php echo ($this->pesquisa_dados["pesquisa_status"] == "I") ? "selected" : ""; ?>>INATIVO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao" class="col-sm-2 control-label"></label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="submit" value="Procurar" class="btn btn-primary" />
+                                <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="titulo">
+                            <th width="60px">ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>C.P.F.</th>
+                            <th>Status</th>
+                            <th class="btn_titulo"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($this->result["registros"])) { ?>
+                            <?php
+                            foreach ($this->result["registros"] as $registro) {
+                                $txt_id = $txt_nome = $txt_email = $txt_cpf = $txt_status = "--";
+                                if (isset($registro["id"]) && $registro["id"]) {
+                                    $txt_id = $registro["id"];
+                                    $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+                                }
+                                if (isset($registro["pessoa_fisica"]["nome"]) && $registro["pessoa_fisica"]["nome"]) {
+                                    $txt_nome = $registro["pessoa_fisica"]["nome"];
+                                }
+                                if (isset($registro["pessoa_fisica"]["pessoa"]["email"]) && $registro["pessoa_fisica"]["pessoa"]["email"]) {
+                                    $txt_email = $registro["pessoa_fisica"]["pessoa"]["email"];
+                                }
+                                if (isset($registro["pessoa_fisica"]["cpf"]) && $registro["pessoa_fisica"]["cpf"]) {
+                                    $txt_cpf = \Marabaixo\Util::formatCpf($registro["pessoa_fisica"]["cpf"]);
+                                }
+                                if (isset($registro["status"]["descricao"]) && $registro["status"]["descricao"]) {
+                                    $txt_status = $registro["status"]["descricao"];
+                                }
+                                ?>
+                                <tr>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_nome; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_email; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_cpf; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_status; ?></a></td>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editar", "id" => $txt_id), true); ?>"><i class="fa fa-cogs"></i></a>
+                                            <a class="btn btn-default link_confirma" title="Excluir" href="<?php echo $this->url(null, array("action" => "excluir", "id" => $txt_id), true); ?>"><i class="fa fa-trash-o"></i></a>
+                                            <a class="btn btn-default link_confirma" title="Gerar Senha Temporária" href="<?php echo $this->url(null, array("action" => "senha", "id" => $txt_id), true); ?>"><i class="fa fa-key"></i></a>
+                                            <a class="btn btn-default" title="Grupos" href="<?php echo $this->url(null, array("action" => "grupo", "id" => $txt_id), true); ?>"><i class="fa fa-group"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+    <?php } ?>
+                <?php } else { ?>
+                            <tr>
+                                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+                            </tr>
+<?php } ?>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+<?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+            </div>
+        </div>
+
+    </div>
+</div>

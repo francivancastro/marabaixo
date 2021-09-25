@@ -1,0 +1,22 @@
+<?php
+$txt_documento_tipo = "--";
+if (isset($this->documentotipo)) {
+    $dt = $this->documentotipo;
+    if (isset($dt["tostring"])) {
+        $txt_documento_tipo = $dt["tostring"];
+    }
+}
+?>
+<div class="col-md-12">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Tipo de Documento</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <dl class="dl-horizontal">
+                <dt>Tipo de Documento: </dt>
+                <dd><?php echo $txt_documento_tipo; ?></dd>
+            </dl>
+        </div><!-- /.box-body -->
+    </div>
+</div>

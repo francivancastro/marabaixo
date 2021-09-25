@@ -1,0 +1,120 @@
+<div class="row">
+    <form action="" method="post" class="form-horizontal" id="pesquisa_form">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Formulário de Pesquisa</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="pesquisa_nome" class="col-sm-2 control-label">Nome: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_nome" id="pesquisa_nome" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_nome"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_cpf" class="col-sm-2 control-label">CPF: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_cpf" id="pesquisa_cpf" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_cpf"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pesquisa_mat" class="col-sm-2 control-label">Matrícula: </label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="text" name="pesquisa_mat" id="pesquisa_cpf" class="form-control pesquisa_field" value="<?php echo $this->pesquisa_dados["pesquisa_mat"]; ?>" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descricao" class="col-sm-2 control-label"></label>
+                        <div class="controls">
+                            <div class="col-sm-4">
+                                <input type="submit" value="Procurar" class="btn btn-primary" />
+                                <input type="button" value="Limpar" class="btn btn-default" id="pesquisa_btn_limpar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-md-12">
+        <?php include("include/servidor.phtml"); ?>
+        <div class="box">
+            <div class="box-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr class="titulo">
+                            <th width="60px">ID</th>
+                            <th>Nome</th>
+                            <th>Matricula</th>
+                            <th>C.P.F.</th>
+                            <th>Situação</th>
+                            <th class="btn_titulo"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (isset($this->result["registros"])) { ?>
+
+                            <?php
+                            foreach ($this->result["registros"] as $registro) {
+
+                                $txt_id = $txt_nome = $txt_email = $txt_cpf = $txt_status = "--";
+                                if (isset($registro["id"]) && $registro["id"]) {
+                                    $txt_id = $registro["id"];
+                                    $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+                                }
+                                if (isset($registro["usuario"]["pessoa_fisica"]["tostring"]) && $registro["usuario"]["pessoa_fisica"]["tostring"]) {
+                                    $txt_nome = $registro["usuario"]["pessoa_fisica"]["tostring"];
+                                }
+                                if (isset($registro["matricula"]) && $registro["matricula"]) {
+                                    $txt_matricula = $registro["matricula"];
+                                }
+                                if (isset($registro["usuario"]["pessoa_fisica"]["cpf"]) && $registro["usuario"]["pessoa_fisica"]["cpf"]) {
+                                    $txt_cpf = \Marabaixo\Util::formatCpf($registro["usuario"]["pessoa_fisica"]["cpf"]);
+                                }
+                                if (isset($registro["servidor_situacao"]["descricao"]) && $registro["servidor_situacao"]["descricao"]) {
+                                    $txt_situacao = $registro["servidor_situacao"]["descricao"];
+                                }
+                                ?>
+                                <tr>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_id; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_nome; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_matricula; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_cpf; ?></a></td>
+                                    <td><a href="<?php echo $url_view; ?>"><?php echo $txt_situacao; ?></a></td>
+                                    <td>
+                                        <div class="btn-group pull-right">
+                                            <a class="btn btn-default" title="Visualizar" href="<?php echo $url_view; ?>"><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-default" title="Editar" href="<?php echo $this->url(null, array("action" => "editar", "id" => $txt_id), true); ?>"><i class="fa fa-cogs"></i></a>                                            <a 
+                                                <a class="btn btn-default" title="Encaminhar" href="<?php echo $this->url(null, array("action" => "encaminhar", "id" => $txt_id), true); ?>"><i class="fa fa-arrow-up"></i></a>
+                                                <a class="btn btn-default" title="Ativar/Desativar" href="<?php echo $this->url(null, array("action" => "ativar", "id" => $txt_id), true); ?>"><i class="fa fa-check-square-o"></i></a>
+                                                <a class="btn btn-default" title="Tornar Chefe" href="<?php echo $this->url(null, array("action" => "tornarChefe", "id" => $txt_id), true); ?>"><i class="fa fa-user"></i></a>
+                                                <a class="btn btn-default" title="Ocorrência" href="<?php echo $this->url(null, array("action" => "ocorrencia", "id" => $txt_id), true); ?>"><i class="fa fa-edit"></i></a>                                                
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <tr>
+                                <td colspan="6"><div class="text-center">NENHUM REGISTRO LOCALIZADO!</div></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer clearfix">
+                <?php echo $this->partial("layout/pagination", array("result" => $this->result)); ?>
+            </div>
+        </div>
+
+    </div>
+</div>

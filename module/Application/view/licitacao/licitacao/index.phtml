@@ -1,0 +1,109 @@
+
+<form action="" method="post" class="form-horizontal" id="pesquisa_form">
+    <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Formulário de Pesquisa</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Data de inscrição: </label>
+            <div class="controls">
+                <div class="col-sm-4">
+                   <div class="input-daterange input-group" id="datepicker">
+                    <input type="text" name="data" class="form-control mask_data datepicker" value="" />
+                    <span class="input-group-addon">A</span>
+                    <input type="text" name="data2" class="form-control mask_data datepicker" value="" />
+                </div> 
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Número de CRC: </label>
+            <div class="controls">
+                <div class="col-sm-4">
+                    <input type="text" name="crc" class="form-control" value="" />
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="box">
+    <div class="box-body">
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Data Abertura</th>
+                      <th>Modalidade</th>
+                      <th>Status</th>
+                      <th>Tipo</th>
+                      <th>Valor</th>
+                      <th>Contratante</th>
+                      <th><span class="pull-right">Ferramentas</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td>201</td>
+                      <td>22/07/2015</td>
+                      <td>Tomada de preços</td>
+                      <td><span class="label label-success">Publicada</span></td>
+                      <td>Técnica e preço</td>
+                      <td>150.000,00</td>
+                      <td>Depto Nacional de Infra-Estrutura de Transportes</td>
+                      <td>
+                        
+                        <div class="btn-group pull-right" role="group">
+                          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                              <li><a href="<?php echo $this->url(null, array('controller' => 'licitacao' , 'action' => 'evento'))?>"><i class="fa fa-calendar-o"></i> Eventos</a></li>
+                            <li><a href="<?php echo $this->url(null, array('controller' => 'licitacao' , 'action' => 'lote'))?>"><i class="fa fa-briefcase"></i> Lotes</a></li>
+                            <li><a href="<?php echo $this->url(null, array('controller' => 'licitacao' , 'action' => 'resultado'))?>"><i class="fa fa-trophy"></i> Resultados</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#"><i class="fa fa-search-minus"></i> Visualizar</a></li>
+                            <li><a href="#"><i class="fa fa-edit"></i> Editar</a></li>
+                            <li><a href="#"><i class="fa fa-trash-o"></i> Excluir</a></li>
+                          </ul>
+                        </div>
+                        
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>183</td>
+                      <td>29/07/2014</td>
+                      <td>Concorrência</td>
+                      <td><span class="label label-danger">Encerrada</span></td>
+                      <td>Técnica e preço</td>
+                      <td>60.000,00</td>
+                      <td>Depto Nacional de Infra-Estrutura de Transportes</td>
+                      <td>
+                        
+                        <div class="btn-group pull-right" role="group">
+                          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                                <li><a href="#"><i class="fa fa-calendar-o"></i> Eventos</a></li>
+                            <li><a href="#"><i class="fa fa-briefcase"></i> Lotes</a></li>
+                            <li><a href="#"><i class="fa fa-trophy"></i> Resultados</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#"><i class="fa fa-search-minus"></i> Visualizar</a></li>
+                            <li><a href="#"><i class="fa fa-edit"></i> Editar</a></li>
+                            <li><a href="#"><i class="fa fa-trash-o"></i> Excluir</a></li>
+                          </ul>
+                        </div>
+                        
+                      </td>
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+    <div class="box-footer clearfix">
+        
+    </div>
+</div>

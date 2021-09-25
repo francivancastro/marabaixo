@@ -1,0 +1,61 @@
+<nav>
+<?php 
+$result = $this->result;
+$total_page = 0;
+if (isset($result["total_page"])) {
+    $total_page = $result["total_page"];
+}
+$atual_page = 1;
+if (isset($result["page"])) {
+    $atual_page = $result["page"];
+}
+if ($total_page > 1) {
+    $page_range = 10;
+    if ($total_page > $page_range) {
+        $page_range_inicio = 1;
+        if ($atual_page > 1) {
+            $page_range_inicio = $atual_page - intval($page_range / 2);
+            if ($page_range_inicio <= 0) {
+                $page_range_inicio = 1;
+            }
+        }
+        $page_range_fim = $page_range_inicio + $page_range;
+        if ($page_range_fim > $total_page) {
+            $page_range_fim = $total_page;
+            $page_range_inicio = $page_range_fim - $page_range;
+        }
+    } else {
+        $page_range_inicio = 1;
+        $page_range_fim = $total_page;
+    }
+?>
+    
+    <ul class="pagination pagination-sm no-margin pull-right">
+<?php if ($atual_page > 1) { ?>
+        <li><a href="<?php echo $this->url(null, array("page" => $atual_page - 1), true); ?>">«</a></li>
+<?php } else { ?>
+        <li class="disabled"><a href="#">«</a></li>
+<?php } ?>
+<?php 
+for ($page = $page_range_inicio; $page <= $page_range_fim; $page++) { 
+    if ($page == $atual_page) {
+?>
+        <li class="active"><a href="#"><?php echo $page; ?> <span class="sr-only">(current)</span></a></li>
+<?php } else { ?>
+        <li><a href="<?php echo $this->url(null, array("page" => $page), true); ?>"><?php echo $page; ?></a></li>
+<?php } ?>
+<?php } ?>
+<?php if ($atual_page < $total_page) { ?>
+        <li><a href="<?php echo $this->url(null, array("page" => $atual_page + 1), true); ?>">»</a></li>
+<?php } else { ?>
+        <li class="disabled"><a href="#">»</a></li>
+<?php } ?>
+    </ul>
+<?php } ?>
+</nav>
+
+<?php 
+if (isset($result["total_registros"]) && $result["total_registros"]) {
+?>
+    <div class="pull-left label label-primary"><h5><strong><?php echo $result["total_registros"]; ?></strong> Registro(s) Encontrado(s).</h5></div>
+<?php } ?>

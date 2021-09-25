@@ -1,0 +1,67 @@
+<?php
+$txt_id = $txt_ordem = $txt_descricao = $txt_controller = $txt_action = $txt_icone = $txt_menu_superior = $txt_filhos = "--";
+if (isset($this->result)) {
+    $registro = $this->result;
+    
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"]; 
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["tostring"]) && $registro["tostring"]) { $txt_descricao = $registro["tostring"]; }
+    if (isset($registro["ordem"]) && $registro["ordem"]) { $txt_ordem = $registro["ordem"]; }
+    if (isset($registro["controller"]) && $registro["controller"]) { $txt_controller = $registro["controller"]; }
+    if (isset($registro["action"]) && $registro["action"]) { $txt_action = $registro["action"]; }
+    if (isset($registro["icone"]) && $registro["icone"]) { $txt_icone = "<i class='fa {$registro["icone"]}'></i>"; }
+    if (isset($registro["menu_superior"]["tostring"]) && $registro["menu_superior"]["tostring"]) { $txt_menu_superior = $registro["menu_superior"]["tostring"]; }
+    if (isset($registro["filhos"]) && count($registro["filhos"])) { 
+        $txt = array();
+        foreach ($registro["filhos"] as $filho) {
+            $txt[] = $filho["tostring"];
+        }
+        $txt_filhos = "<ul><li>" . implode("</li><li>", $txt) . "</li></ul>"; 
+    }
+}
+?>
+<div class="row">
+<div class="col-md-12">
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Menu</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>ID: </dt>
+            <dd><?php echo $txt_id; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Ordem: </dt>
+            <dd><?php echo $txt_ordem; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição: </dt>
+            <dd><?php echo $txt_descricao; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Controller: </dt>
+            <dd><?php echo $txt_controller; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Action: </dt>
+            <dd><?php echo $txt_action; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Ícone: </dt>
+            <dd><?php echo $txt_icone; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Menu Superior: </dt>
+            <dd><?php echo $txt_menu_superior; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Inferiores: </dt>
+            <dd><?php echo $txt_filhos; ?></dd>
+        </dl>    
+    </div>
+</div>
+</div>
+    </div>

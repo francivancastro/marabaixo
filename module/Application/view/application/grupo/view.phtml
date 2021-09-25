@@ -1,0 +1,39 @@
+<?php
+$txt_id = $txt_descricao = $txt_chave = $txt_admin = $txt_status = "--";
+if (isset($this->result["id"])) { $txt_id = $this->result["id"]; }
+if (isset($this->result["descricao"])) { $txt_descricao = $this->result["descricao"]; }
+if (isset($this->result["chave"])) { $txt_chave = $this->result["chave"]; }
+if (isset($this->result["administrador"]["descricao"])) { $txt_admin = $this->result["administrador"]["descricao"]; }
+if (isset($this->result["status"]["descricao"])) { $txt_status = $this->result["status"]["descricao"]; }
+?>
+<div class="row">
+<div class="col-md-12">
+    <div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Visualizar Grupo</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>ID: </dt>
+            <dd><?php echo $txt_id; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Descrição: </dt>
+            <dd><?php echo $txt_descricao; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Chave: </dt>
+            <dd><?php echo $txt_chave; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Administrador: </dt>
+            <dd><?php echo $txt_admin; ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Status: </dt>
+            <dd><?php echo $txt_status; ?></dd>
+        </dl>
+    </div>
+</div>
+</div>
+</div>

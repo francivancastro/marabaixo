@@ -1,0 +1,106 @@
+<?php
+$colunas = array();
+$colunas["id"] = "ID";
+$colunas["tipo"] = "Tipo";
+$colunas["usuario"] = "Criado Por";
+$colunas["data_hora"] = "Data / Hora";
+
+$coluna_valores = array();
+foreach ($colunas as $coluna => $titulo) {
+    $coluna_valores[$coluna] = "--";
+}
+
+$campos = $arquivos = array();
+if (isset($this->result) && $this->result) {
+    $registro = $this->result;
+    if (isset($registro["id"]) && $registro["id"]) {
+        $coluna_valores["id"] = $registro["id"];
+    }
+    if (isset($registro["documento_tipo"]["tostring"]) && $registro["documento_tipo"]["tostring"]) {
+        $coluna_valores["tipo"] = $registro["documento_tipo"]["tostring"];
+        if (isset($registro["documento_tipo"]["campos"]) && !empty($registro["documento_tipo"]["campos"])) {
+            $campos = $registro["documento_tipo"]["campos"];
+        }
+    }
+    if (isset($registro["usuario"]["tostring"]) && $registro["usuario"]["tostring"]) {
+        $coluna_valores["usuario"] = $registro["usuario"]["tostring"];
+    }
+    if (isset($registro["data_criacao"]) && $registro["data_criacao"]) {
+        $coluna_valores["data_hora"] = Marabaixo\Util::formatData($registro["data_criacao"]);
+        if (isset($registro["hora_criacao"]) && $registro["hora_criacao"]) {
+            $coluna_valores["data_hora"] .= " " . $registro["hora_criacao"];
+        }
+    }
+
+    if (isset($registro["arquivos"])) {
+        $arquivos = $registro["arquivos"];
+    }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Documento</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <?php foreach ($colunas as $coluna => $titulo) { ?>
+                    <dl class="dl-horizontal">
+                        <dt><?php echo $titulo; ?>: </dt>
+                        <dd><?php echo $coluna_valores[$coluna]; ?></dd>
+                    </dl>
+                <?php } ?>
+                <?php if (count($campos)) { ?>
+                    <?php
+                    foreach ($campos as $campo) {
+                        $txt_titulo = $txt_valor = "--";
+                        $txt_titulo = $campo["tostring"];
+                        if (isset($registro["valores"][$campo["nome"]])) {
+                            $txt_valor = $registro["valores"][$campo["nome"]];
+                        }
+                        ?>
+                        <dl class="dl-horizontal">
+                            <dt><?php echo $txt_titulo; ?>: </dt>
+                            <dd><?php echo $txt_valor; ?></dd>
+                        </dl>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if (count($arquivos)) { ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Arquivos</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <?php
+                    foreach ($arquivos as $arquivo) {
+                        $txt_id = $txt_titulo = "";
+                        if (isset($arquivo["id"])) {
+                            $txt_id = $arquivo["id"];
+                        }
+                        if (isset($arquivo["tostring"])) {
+                            $txt_titulo = $arquivo["tostring"];
+                        }
+                        ?>
+                        <div class="col-md-2">
+                            <div class="box" style="border: 2px solid #ccc;">
+                                <div class="box-header with-border" style="background-color: #ccc;"><?php echo $txt_titulo; ?></div>
+                                <div class="box-body text-center">
+                                    <a target="_blank" href="<?php echo $this->basePath(); ?>/arquivo/baixar/id/<?php echo $txt_id; ?>">
+                                        <img src="<?php echo $this->basePath(); ?>/arquivo/view/id/<?php echo $txt_id; ?>/width/150/height/150" alt="Imagem" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+}

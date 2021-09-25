@@ -1,0 +1,180 @@
+<?php
+if (isset($this->result)) {
+    $registro = $this->result;
+
+    $txt_id = $txt_tipo = $txt_data_hora = $txt_ip = $txt_usuario = $txt_componente = $txt_controller = $txt_action = "--";
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"];
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["log_tipo"]["tostring"]) && $registro["log_tipo"]["tostring"]) {
+        $txt_tipo = $registro["log_tipo"]["tostring"];
+    }
+    if (isset($registro["log_data"]) && $registro["log_data"]) {
+        $txt = array();
+        $txt[] = Marabaixo\Util::formatData($registro["log_data"]);
+        if (isset($registro["log_hora"]) && $registro["log_hora"]) {
+            $txt[] = $registro["log_hora"];
+        }
+        $txt_data_hora = implode(" ", $txt);
+    }
+    if (isset($registro["ip"]) && $registro["ip"]) {
+        $txt_ip = $registro["ip"];
+    }
+    if (isset($registro["usuario"]["tostring"]) && !empty($registro["usuario"]["tostring"])) {
+        $txt_usuario = $registro["usuario"]["tostring"];
+    } elseif (isset($registro["email"]) && !empty($registro["email"])) {
+        $txt_usuario = $registro["email"];
+    }
+    if (isset($registro["componente"]["tostring"]) && !empty($registro["componente"]["tostring"])) {
+        $txt_componente = $registro["componente"]["tostring"];
+    }
+    if (isset($registro["controller_obj"]["tostring"]) && !empty($registro["controller_obj"]["tostring"])) {
+        $txt_controller = $registro["controller_obj"]["tostring"];
+    } elseif (isset($registro["controller"]) && !empty($registro["controller"])) {
+        $txt_controller = $registro["controller"];
+    }
+    if (isset($registro["action_obj"]["tostring"]) && !empty($registro["action_obj"]["tostring"])) {
+        $txt_action = $registro["action_obj"]["tostring"];
+    } elseif (isset($registro["action"]) && !empty($registro["action"])) {
+        $txt_action = $registro["action"];
+    }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Log</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>ID: </dt>
+                    <dd><?php echo $txt_id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo: </dt>
+                    <dd><?php echo $txt_tipo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data / Hora: </dt>
+                    <dd><?php echo $txt_data_hora; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Endereço IP: </dt>
+                    <dd><?php echo $txt_ip; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Usuário / E-mail: </dt>
+                    <dd><?php echo $txt_usuario; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Componente: </dt>
+                    <dd><?php echo $txt_componente; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Controller: </dt>
+                    <dd><?php echo $txt_controller; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Action: </dt>
+                    <dd><?php echo $txt_action; ?></dd>
+                </dl>    
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+if (isset($this->result["log_bd"]) && !empty($this->result["log_bd"])) {
+    $objs = $this->result["log_bd"];
+    ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Operações em Banco de Dados</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+
+                    <?php
+                    foreach ($objs as $obj) {
+                        $txt_tipo = $txt_schema = $txt_tabela = $txt_identificador = "--";
+                        if (isset($obj["log_bd_tipo"]["tostring"]) && $obj["log_bd_tipo"]["tostring"]) {
+                            $txt_tipo = $obj["log_bd_tipo"]["tostring"];
+                        }
+                        if (isset($obj["schema"]) && $obj["schema"]) {
+                            $txt_schema = $obj["schema"];
+                        }
+                        if (isset($obj["tabela"]) && $obj["tabela"]) {
+                            $txt_tabela = $obj["tabela"];
+                        }
+                        if (isset($obj["identificador"]) && $obj["identificador"]) {
+                            $txt_identificador = $obj["identificador"];
+                        }
+                        ?>
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><?php echo $txt_tipo; ?></h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Tipo: </dt>
+                                    <dd><?php echo $txt_tipo; ?></dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Schema: </dt>
+                                    <dd><?php echo $txt_schema; ?></dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Tabela: </dt>
+                                    <dd><?php echo $txt_tabela; ?></dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>ID: </dt>
+                                    <dd><?php echo $txt_identificador; ?></dd>
+                                </dl>
+<?php 
+if (isset($obj["log_bd_campo"]) && !empty($obj["log_bd_campo"])) {
+    $objs = $obj["log_bd_campo"];
+?>
+                                <dl class="dl-horizontal">
+                                    <dt>Dados Alterados: </dt>
+                                    <dd>
+                                        <div class="box">
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Campo</th>
+                                                        <th>Valor Anterior</th>
+                                                        <th>Valor Alterado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+<?php 
+foreach ($objs as $obj) { 
+    $txt_campo = $txt_valor_anterior = $txt_valor_atual = "--";
+    if (isset($obj["nome"]) && $obj["nome"]) { $txt_campo = $obj["nome"]; }
+    if (isset($obj["valor_anterior"]) && $obj["valor_anterior"]) { $txt_valor_anterior = $obj["valor_anterior"]; }
+    if (isset($obj["valor_alterado"]) && $obj["valor_alterado"]) { $txt_valor_atual = $obj["valor_alterado"]; }
+?>
+                                                    <tr>
+                                                        <td><?php echo $txt_campo; ?></td>
+                                                        <td><?php echo $txt_valor_anterior; ?></td>
+                                                        <td><?php echo $txt_valor_atual; ?></td>
+                                                    </tr>
+<?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>                        
+                                    </dd>
+                                </dl>
+<?php } ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>

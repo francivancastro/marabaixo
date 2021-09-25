@@ -1,0 +1,116 @@
+<?php
+$txt_id = $txt_documento_tipo = $txt_entidade = $txt_tipo = $txt_nome = $txt_tamanho = $txt_ordem = $txt_obrigatorio = $txt_mostrar_listagem = $txt_tostring = "--";
+$txt_lista = "";
+if (isset($this->result)) {
+    $registro = $this->result;
+
+    if (isset($registro["id"]) && $registro["id"]) {
+        $txt_id = $registro["id"];
+        $url_view = $this->url(null, array("action" => "view", "id" => $txt_id), true);
+    }
+    if (isset($registro["documento_tipo"]["tostring"])) {
+        $txt_documento_tipo = $registro["documento_tipo"]["tostring"];
+    }
+    if (isset($registro["documento_campo_tipo"]["tostring"])) {
+        $txt_tipo = $registro["documento_campo_tipo"]["tostring"];
+    }
+    if (isset($registro["entidade"]) && $registro["entidade"]) {
+        $txt_entidade = $registro["entidade"];
+    }
+    if (isset($registro["nome"])) {
+        $txt_nome = $registro["nome"];
+    }
+    if (isset($registro["tamanho"]) && $registro["tamanho"]) {
+        $txt_tamanho = $registro["tamanho"];
+    }
+    if (isset($registro["ordem"])) {
+        $txt_ordem = $registro["ordem"];
+    }
+    if (isset($registro["obrigatorio"])) {
+        $txt_obrigatorio = "NÃO";
+        if ($registro["obrigatorio"] == "S") {
+            $txt_obrigatorio = "SIM";
+        }
+    }
+    if (isset($registro["mostrar_listagem"])) {
+        $txt_mostrar_listagem = "NÃO";
+        if ($registro["mostrar_listagem"] == "S") {
+            $txt_mostrar_listagem = "SIM";
+        }
+    }
+    if (isset($registro["to_string"])) {
+        $txt_tostring = "NÃO";
+        if ($registro["to_string"] == "S") {
+            $txt_tostring = "SIM";
+        }
+    }
+    
+    if (isset($registro["lista"])) {
+        $lista = $registro['lista'];
+        if (count($lista)) {
+            $items = array();
+            foreach ($lista as $lista_item) {
+                $items[] = $lista_item["chave"] . " - " . $lista_item["descricao"];
+            }
+            $txt_lista = "<ul><li>" . implode("</li><li>", $items) . "</li></ul>";
+        }
+    }
+}
+?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Visualizar Campo de Tipo de Documento</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <dl class="dl-horizontal">
+                    <dt>ID: </dt>
+                    <dd><?php echo $txt_id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo de Documento: </dt>
+                    <dd><?php echo $txt_documento_tipo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo: </dt>
+                    <dd><?php echo $txt_tipo; ?></dd>
+                </dl>
+<?php if ($txt_lista) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Ítens de Campo: </dt>
+                    <dd><?php echo $txt_lista; ?></dd>
+                </dl>
+<?php } ?>
+                <dl class="dl-horizontal">
+                    <dt>Domínio: </dt>
+                    <dd><?php echo $txt_entidade; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Nome: </dt>
+                    <dd><?php echo $txt_nome; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tamanho: </dt>
+                    <dd><?php echo $txt_tamanho; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Ordem: </dt>
+                    <dd><?php echo $txt_ordem; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Obrigatório: </dt>
+                    <dd><?php echo $txt_obrigatorio; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Mostrar Listagem: </dt>
+                    <dd><?php echo $txt_mostrar_listagem; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>To String: </dt>
+                    <dd><?php echo $txt_tostring; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
